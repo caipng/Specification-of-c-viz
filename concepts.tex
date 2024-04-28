@@ -1,0 +1,46 @@
+\newpage
+\section{Concepts}\label{sec:concepts}
+
+\subsection{Numerical limits}\label{subsec:numlimits}
+
+The following are the constant values defined for the numerical limits of integer types.
+A future version of \Verb|c-viz| may allow for configuration of these values.
+
+\begin{table}[h]
+\begin{tabular}{>{\ttfamily \bfseries}r>{$}l<{$}l}
+CHAR\_BIT    &  8 &  number of bits for smallest object (byte)\\
+SCHAR\_MIN   &  -(2^7-1) &  minimum value for an object of type \Verb!signed char!\\
+SCHAR\_MAX   &  2^7 - 1 &  maximum value for an object of type \Verb!signed char!\\
+UCHAR\_MAX   &  2^8 - 1 &  maximum value for an object of type \Verb!unsigned char!\\
+CHAR\_MIN    &  -(2^7-1) &  minimum value for an object of type \Verb!char!\\
+CHAR\_MAX    &  2^7 - 1 &  maximum value for an object of type \Verb!char!\\
+MB\_LEN\_MAX &  1 & maximum number of bytes in a multibyte character\\
+SHRT\_MIN    &  -(2^{15}-1)&  minimum value for an object of type \Verb!short int!\\
+SHRT\_MAX    &  2^{15}-1&  maximum value for an object of type \Verb!short int!\\
+USHRT\_MAX   &  2^{16}-1&  maximum value for an object of type \Verb!unsigned short int!\\
+INT\_MIN     &  -(2^{31}-1)&  minimum value for an object of type \Verb!int!\\
+INT\_MAX     &  2^{31}-1&  maximum value for an object of type \Verb!int!\\
+UINT\_MAX    &  2^{32}-1&  maximum value for an object of type \Verb!unsigned int!\\
+LONG\_MIN    &  -(2^{31}-1)&  minimum value for an object of type \Verb!long int!\\
+LONG\_MAX    &  2^{31}-1&  maximum value for an object of type \Verb!long int!\\
+ULONG\_MAX   &  2^{32}-1&  maximum value for an object of type \Verb!unsigned long int!\\
+LLONG\_MIN   &  -(2^{63}-1)&  minimum value for an object of type \Verb!long long int!\\
+LLONG\_MAX   &  2^{63}-1&  maximum value for an object of type \Verb!long long int!\\
+ULLONG\_MAX  &  2^{64}-1& maximum value for an object of type \Verb!unsigned long long int!
+\end{tabular}
+\end{table}
+
+\subsection{Scopes of identifiers}\label{subsec:scopes}
+\spec{
+An identifier can denote an object; a function; a tag or a member of a structure; or a typedef name. The same identifier can denote different entities at different points in the program.
+\par
+For each different entity designated by an identifier, the identifier can only be used within a region of program code called its \emph{scope}. Thus an identifier can designate different entities only if they are in different scopes or in different name spaces.
+\par
+\deviation{
+There are 2 kinds of scopes: file and block. Function prototype scope and function scope\tablefootnote{used only by label names for \Verb!goto! constructs} are not supported.
+}
+\par
+
+}
+
+\subsection{Types}\label{subsec:types}

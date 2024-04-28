@@ -1,0 +1,80 @@
+\newpage
+\section{External Definitions}\label{sec:extdef}
+
+\specsyntax{
+    TranslationUnit :::=
+    {\sffamily ExternalDeclaration} , \{ {\sffamily ExternalDeclaration} \}
+    // \hyperref[sec:extdef]{external definitions}
+    ;;;
+    ExternalDeclaration :::=
+    ! {\sffamily FunctionDefinition}
+    ! {\sffamily Declaration}
+    ;;;
+}
+
+\specconstraints{
+Every identifier declared in a translation unit can have at most one external definition.
+Moreover, if such an identifier is used in an expression, then there shall be exactly one external definition for the identifier in the translation unit.
+\par
+\deviation{A translation unit must define a \Verb!main! function. The \Verb!main! function shall be defined with no parameters\tablefootnote{\Verb!argc! and \Verb!argv! are not supported} and a return type of \Verb!int!.}
+\par
+\deviation{Forward declaration of functions are not supported. Functions must be defined prior to any code that references them. On the other hand, forward declaration of \Verb!struct!s, such as to construct self-referential types, are supported in file scope.}
+\par
+\begin{lstlisting}^^J
+void f(int); // ERROR: forward declaration of a function^^J
+void f(int a) \{\}^^J
+^^J
+struct node \{^^J
+\ \ int value;^^J
+\ \ struct node * next; // OK: forward declaration of struct node^^J
+\};^^J
+\end{lstlisting}
+}
+
+\specsem{
+A translation unit is a sequence of external declarations. They are described as ``external" as they appear outside any function. An external definition is an external declaration that is also a definition\footnote{a declaration that causes memory to be reserved for an object or function} of a function or an object.
+}
+
+\subsection{Function definitions}\label{subsec:fndef}
+
+\specsyntax{
+    FunctionDefinition :::=
+    {\sffamily DeclarationSpecifiers} , {\sffamily Declarator} , {\sffamily CompoundStatement}
+    // \hyperref[subsec:fndef]{function definitions}
+    ;;;
+    DeclarationList :::=
+    {\sffamily Declaration} , \{ {\sffamily Declaration} \}
+}
+
+\specconstraints{
+The identifier declared in a function definition shall have function type.
+\par
+The return type of a function shall be \Verb!void! or an object type other than array type.
+\par
+\deviation{The declaration specifiers shall not contain any storage-class specifiers.}
+\par
+The declaration of each parameter shall include an identifier, other than the special case where there is only a single parameter of type \Verb!void! to denote a function that has no parameters.
+}
+
+\specsem{
+The identifier for each parameter is an lvalue and is effectively declared at the start of the compound statement constituting the function body.
+Therefore, these identifiers may not be re-declared in the function body except for in an enclosing block.
+\par
+\deviation{The layout of the storage for parameters is specified as such: the leftmost argument has address equal to the starting address of the stack frame, and memory allocation proceeds left to right with minimum padding added to ensure alignment.}
+\par
+On entry to the function, the value of each argument expression is converted to the type of the corresponding parameter as if by assignment.
+\par
+After all parameters have been assigned, the function body is executed.
+\par
+\deviation{If the \Verb!\}! that terminates a function is reached, the interpreter throws an error\tablefootnote{functions returning \Verb!void! need to include a \Verb!return! statement as well}. The only exception is in the case of the \Verb!main! function, in which case a value of 0 is returned.}
+}
+
+\subsection{External object definitions}\label{subsec:extobjdef}
+
+\specsem{
+An external definition for an identifier is a declaration with initializer for an object with file scope.
+\par
+\deviation{Each identifier may only be declared once. \emph{Tentative definitions} are not supported.}
+\par
+A declaration without an initializer for an object with file scope behaves as if an initializer exists and is equal to 0.
+}

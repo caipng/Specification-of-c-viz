@@ -1,0 +1,250 @@
+\documentclass[11pt]{article}
+\usepackage[showframe=true]{geometry}
+% \usepackage{geometry}
+\geometry{a4paper,top=1in,bottom=1in,left=1.2in,right=1.2in}
+
+\usepackage[dvipsnames]{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Font setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{libertine}
+\ExplSyntaxOn
+\bool_if:nTF { \sys_if_engine_xetex_p: || \sys_if_engine_luatex_p: }
+  {
+    % Load mathtools before unicode-math
+    \usepackage{mathtools}
+    \usepackage[
+      math-style=ISO,
+      warnings-off={mathtools-colon, mathtools-overbracket},
+    ]{unicode-math}
+    \setmathfont{LibertinusMath-Regular.otf}[Scale = MatchUppercase]
+    \setmathfont{Garamond-Math.otf}[
+      Scale = MatchUppercase,
+      range = {\Coloneq}
+    ]
+
+    \setmonofont{Inconsolatazi4}[
+      Extension = .otf,
+      UprightFont = *-Regular,
+      BoldFont = *-Bold,
+      Scale=MatchLowercase,
+      AutoFakeSlant = 0.2,
+    ]
+  }
+  {
+    \usepackage[libertine]{newtxmath}
+    \usepackage{inconsolata}
+  }
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Presentations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,breakable}
+\tcbset{listing engine=listings, colframe=black, colback=white, size=small}
+
+\NewTCBListing { example } { !O{} !s }
+  {
+    sharp corners,
+    IfBooleanTF = { #2 }
+      { listing above text }
+      { listing side text },
+    fontlower = \small,
+    #1
+  }
+
+\NewTCBListing { listing } { !O{} }
+  { sharp corners, listing only, #1 }
+
+\NewDocumentEnvironment {exampleside} {}
+  { \tcblisting{listing side text,righthand width=.5\textwidth} }
+  { \endtcblisting }
+
+\NewDocumentEnvironment { presentcommand } { b }
+  {%
+    \vspace*{0.5\baselineskip}\noindent\fbox{%
+    \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule}
+      #1
+    \end{minipage}}\vspace*{0.5\baselineskip}
+  }
+  { }
+
+\NewDocumentCommand \cmd { m } {\texttt{\char`\\#1}}
+\NewDocumentCommand \env { m m }
+  {
+    \texttt{%
+      \char`\\begin\{#1\} \textrm{#2}%
+      \char`\\end\{#1\}%
+    }%
+  }
+
+
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+% \fakeverb
+\usepackage{codehigh}
+
+\newcommand*{\secref}[1]{\hyperref[{#1}]{section~\ref*{#1} -- \emph{\nameref*{#1}}}}
+\newcommand*{\Secref}[1]{\hyperref[{#1}]{Section~\ref*{#1} -- \emph{\nameref*{#1}}}}
+\newcommand*{\subsecref}[1]{\hyperref[{#1}]{subsection~\ref*{#1} -- \emph{\nameref*{#1}}}}
+\newcommand*{\subsubsecref}[1]{\hyperref[{#1}]{\nameref*{#1}}}
+\newcommand*{\parref}[1]{\hyperref[{#1}]{\nameref*{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% simplebnf %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{simplebnf}
+\SetBNFLayout{
+    colspec = {Q[0mm] Q[r, font=\sffamily] Q[r] Q[l, mode=text, font=\ttfamily, wd=90mm] Q[l]},
+    % row{-} = {bg = azure9},
+}
+\SetBNFConfig{
+    prod-delim = ;;;,
+    new-line-delim = !,
+    single-line-delim = @,
+    comment = //,
+    relation = {:::=},
+    relation-sym-map =
+    {
+      {:::=} = $\Coloneqq$,
+    },
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Miscellaneous %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hologo}
+\newcommand*{\XeLaTeX}{\hologo{XeLaTeX}}
+\newcommand*{\LuaLaTeX}{\hologo{LuaLaTeX}}
+
+\usepackage{pdflscape}
+
+% ``Make sure it comes *last* of your loaded packages"
+\usepackage[pdfborder={0 0 0}, colorlinks=true]{hyperref}
+\hypersetup{
+    linkcolor=BrickRed
+}
+
+\newcommand{\specsyntax}[2][90mm]{
+    \subsubsection*{Syntax}
+    \centerline{
+        \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,#1]Q[l]}]
+        #2
+        \end{bnf}
+    }
+    \bigskip
+}
+
+\newcommand{\specconstraints}[1]{
+    \subsubsection*{Constraints}
+    {
+        \setlength{\parindent}{0pt}
+        \tiny
+        \setlength{\parskip}{\baselineskip}
+        \normalsize
+        \vspace{-10pt}
+        #1
+    }
+}
+
+\newcommand{\specsem}[1]{
+    \subsubsection*{Semantics}
+    {
+        \setlength{\parindent}{0pt}
+        \tiny
+        \setlength{\parskip}{\baselineskip}
+        \normalsize
+        \vspace{-10pt}
+        #1
+    }
+}
+
+\newcommand{\spec}[1]{
+    {
+        \vspace{8pt}
+        \setlength{\parindent}{0pt}
+        \tiny
+        \setlength{\parskip}{\baselineskip}
+        \normalsize
+        \vspace{-10pt}
+        #1
+    }
+}
+
+\usepackage{fancyvrb}
+\usepackage[framemethod=tikz]{mdframed}
+
+\newcommand{\deviation}[1]{
+    \begin{mdframed}[hidealllines=true,backgroundcolor=blue!8,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt,innertopmargin=3pt,innerbottommargin=3pt]
+    #1
+    \end{mdframed}
+    \vspace{-14pt}
+}
+
+\usepackage{tablefootnote} 
+\makeatletter 
+\AfterEndEnvironment{mdframed}{%
+ \tfn@tablefootnoteprintout% 
+ \gdef\tfn@fnt{0}% 
+}
+\makeatother 
+
+% \newcommand*{\mycommentstyle}[1]{%
+%   \begingroup
+%     \sffamily
+%     \itshape
+%     \lstset{columns=fullflexible}%
+%     #1%
+%   \endgroup
+% }
+\lstset{language=C,xleftmargin=10pt,belowskip=0pt,basicstyle=\ttfamily\footnotesize,commentstyle=\sffamily\itshape,columns=fullflexible}
+
+\usepackage{array}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Metadata %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{%
+  \textsf{c-viz} --- Specification for \texttt{v0.1.1}%
+  \footnote{Source code made available at this \href{https://github.com/caipng/c-viz/tree/d1f985e7ef38a52ca8c50dae77cd190145ecdfb2}{public repository}}}
+\author{Cai Kai'An\footnote{E-mail: %
+  \href{mailto:kaian531@gmail.com}{\texttt{kaian531@gmail.com}}}}
+\date{26/04/2024}
+
+\pagestyle{headings}
+\renewcommand{\subsectionmark}[1]{%
+  \markright{\MakeUppercase{\thesubsection.\ #1}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+\vfill
+
+\verb|c-viz| is a project that aims to develop a web-based explicit-control evaluator\footnote{As described in \href{https://sourceacademy.org/sicpjs/5.4}{SICP - JS Edition Section 5.4}} for a suitably chosen sublanguage of \verb|C|.
+The goal is to create an environment for running \verb|C| programs suitable for first-year computer science students.
+The mental model encouraged by the visualizer avoids knowledge of a \verb|C| compiler or intimate details of the underlying hardware, which tend to be obstacles for many learners.
+At the same time, students will still be exposed to important concepts such as undefined behaviours and \verb|C|'s memory model.
+\par
+\medskip
+This document specifies the subset of \verb|C| supported.
+
+\begingroup
+  \hypersetup{hidelinks}
+  \tableofcontents
+\endgroup
+
+\bigskip
+
+\input{intro}
+\input{concepts}
+
+\section{Lexical Grammar}\label{sec:lexgrammar}
+\section{Expressions}\label{sec:expr}
+\section{Declarations}\label{sec:decl}
+\section{Statements}\label{sec:stmt}
+
+\input{extdef}
+
+\section{Memory Model}\label{sec:memory}
+\section{Operational Semantics}\label{sec:opsem}
+
+\newpage
+\appendix
+\input{syntax}
+
+\end{document}
