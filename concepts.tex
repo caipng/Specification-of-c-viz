@@ -34,13 +34,485 @@ ULLONG\_MAX  &  2^{64}-1& maximum value for an object of type \Verb!unsigned lon
 \spec{
 An identifier can denote an object; a function; a tag or a member of a structure; or a typedef name. The same identifier can denote different entities at different points in the program.
 \par
-For each different entity designated by an identifier, the identifier can only be used within a region of program code called its \emph{scope}. Thus an identifier can designate different entities only if they are in different scopes or in different name spaces.
+The \emph{scope} of an identifier is a region of program code in which the identifier may be used to refer to a particular entity.
+An identifier can designate different entities only if they are in different scopes or in different name spaces.
 \par
 \deviation{
-There are 2 kinds of scopes: file and block. Function prototype scope and function scope\tablefootnote{used only by label names for \Verb!goto! constructs} are not supported.
+There are two kinds of scopes: file and block. Function prototype scope and function scope\tablefootnote{used only by label names for \Verb!goto! constructs} are not supported.
 }
 \par
+The scope of an identifier is determined by where its declaration appears.
+If the declaration appears outside of any block, the identifier has \emph{file scope}, which terminates at the end of the translation unit.
+If it appears inside a block, the identifier has \emph{block scope}, which terminates at the end of the block.
+\par
+If two different entities existing in the same name space have the same identifier, then the scope of one of them (the \emph{inner scope}) must be a strict subset of the other (the \emph{outer scope}). 
+Within the inner scope, the identifier will designate the entity declared within and the entity declared in the outer scope is \emph{hidden}.
+Two identifiers is said to have the \emph{same scope} if their scopes terminate at the same point.
+\par
+Structure tags have scopes beginning just after the appearance of the tag in the type specifier portion of its declaration.
+All other identifiers have scope beginning just after the completion of its declarator.
+}
 
+\subsection{Name spaces of identifiers}\label{subsec:namespaces}
+\spec{
+If more than one declaration of an identifier is visible at any point, the context in which the identifier is used disambiguates what entity it refers to.
+Thus, there are separate \emph{name spaces} for identifiers:
+\begin{itemize}
+    \item the \emph{tags} of structures (appears right after the keyword \Verb!struct!)
+    \item the \emph{members} of structures; each structure has a separate name space for its members (disambiguated by the type of the expression used to access the member)
+    \item all other identifiers
+\end{itemize}
+}
+
+\subsection{Storage duration of objects}\label{subsec:storageduration}
+\spec{
+An object has a \emph{storage duration} that determines its lifetime.
+There are three storage durations: static, automatic, and allocated.
+\par
+The \emph{lifetime} of an object is the portion of program execution during which memory is allocated to it.
+Hence, an object has a constant address and retains its last-stored value throughout its lifetime.
+\par
+\deviation{
+If an object is referred to outside of its lifetime, the interpreter throws the error\\
+\Verb!"no object allocated at ..."!. Future versions of \Verb!c-viz! should allow for such runtime checks to be disabled.
+}
+\par
+\deviation{Pointers retain their values when objects they point to reaches the end of their lifetime.
+}
+\par
+An object designated by an identifier with file scope has \emph{static storage duration}, with its lifetime spanning the entire execution of the program\footnote{program execution begins on entry to the \Verb!main! function and ends when the \Verb!main! function returns}.
+\par
+An object designated by an identifier with block scope has \emph{automatic storage duration}.
+Its lifetime extends from entry into the block until execution of that block ends\footnote{the corresponding \Verb!EXIT\_BLOCK! instruction is popped from the control stack}.
+The initial value of the object is indeterminate.
+\par
+\emph{Allocated storage duration} is described in \subsecref{subsec:memmgtfns}.
 }
 
 \subsection{Types}\label{subsec:types}
+\spec{
+Types give meaning to values stored in objects. They are partitioned into:
+\begin{itemize}
+    \item \emph{object types} which fully describe objects
+    \item \emph{function types} that describe functions
+    \item \emph{incomplete types} that describe objects (or \Verb!void!) but lack information to determine their sizes
+\end{itemize}
+\par
+The types supported by \Verb!c-viz! are: \Verb!\_Bool!, \Verb!char!, \Verb!signed char!, \Verb!unsigned char!, \Verb!short int!,\\ \Verb!unsigned short int!, \Verb!int!, \Verb!unsigned int!, \Verb!long int!, \Verb!unsigned long int!, \Verb!long long int!,\\ \Verb!unsigned long long int!, \Verb!void!, arrays, structures, functions and pointers.
+Other than functions (function type) and \Verb!void! (incomplete type), the other types are object types.
+\par
+The \emph{signed integer types} consists of \Verb!signed char!, \Verb!short int!, \Verb!int!, \Verb!long int! and \Verb!long long int!.
+\par
+For each of the signed integer types, there is a corresponding unsigned integer type designated with the keyword \Verb!unsigned!.
+They use the same amount of storage and have the same alignment requirements.
+These types, combined with the type \Verb!\_Bool!, make up the \emph{unsigned integer types}.
+\par
+If a signed integer type can represent a range of nonnegative values $S$ and its corresponding unsigned integer type can represent a range of values $U$, then $S \subseteq U$.
+Furthermore, the representation of any $x \in S$ is the same for both types.
+\par
+Computations involving unsigned operands can never overflow.
+A result $x$ that cannot be represented by the resulting unsigned integer type with maximum value $M$ will be reduced to \\$x \mod (M + 1)$.
+\par
+\deviation{The interpreter throws an error on signed integer overflows.}
+\par
+\deviation{
+Real and complex floating types are currently not supported.
+}
+\par
+The type \Verb!char! along with the signed and unsigned integer types make up the \emph{integer types} and \emph{arithmetic types}.
+The three types \Verb!char!, \Verb!signed char! and \Verb!unsigned char! make up the \emph{character types}.
+\par
+\deviation{
+The type \Verb!char! is defined to have the same range, representation and behaviour as \Verb!signed char!.
+}
+\par
+The \Verb!void! type denotes an empty set of values and is an incomplete type that cannot be completed.
+\par
+Any number of \emph{derived types} may be constructed from the object, function and incomplete types:
+\begin{itemize}
+    \item An \emph{array} type describes a contiguously allocated nonempty set of objects with a particular \emph{element type}.
+    Arrays are characterized by their element type and the number of elements.
+    \item A \emph{structure} type describes a sequentially allocated nonempty\footnote{empty structures are supported by some \Verb!C! compilers and is also a valid \Verb!C++! construct} set of member objects, each of which has an optionally specified name.
+    \item A \emph{function} type describes a function with some return type.
+    It is characterized by its return type and the number and types of its parameters.
+    \item A \emph{pointer} type may be derived from any type, called the \emph{referenced type}.
+    It describes an object whose value is the memory address of an entity of the referenced type.
+\end{itemize}
+These derived types may be constructed recursively.
+\par
+\deviation{
+\emph{Union} types are currently not supported.
+}
+\par
+The \emph{scalar types} consists of arithmetic and pointer types.
+The \emph{aggregate types} consist of array and structure types.
+\par
+\deviation{Array types of unknown sizes\tablefootnote{arrays of unknown sizes \Verb!T[]! in function parameter lists can be replaced by corresponding pointer types instead; their only other use in \Verb!C! is within \Verb!extern! declarations, which are not supported} or variable length are not supported.}
+\par
+A structure type of unknown content is an incomplete type.
+It can be completed by declaring the same structure tag with its defining content later in the same scope\footnote{see example in \secref{sec:extdef}}.
+\par
+A type has known constant size if the type is not incomplete.
+\par
+\deviation{
+Only \emph{unqualified} types are supported.
+}
+\par
+\deviation{
+Pointers to any type have the same representation and alignment requirements.
+}
+}
+
+\subsubsection{Size and alignment}\label{subsubsec:sizealign}
+\spec{
+Every complete object type has two properties, \emph{alignment requirement} and \emph{size}.
+The size of an object is the number of bytes in memory that it occupies.
+The alignment requirement of an object is a non-negative integral power of two representing the number of bytes between successive addresses at which objects of this type can be allocated.
+\par
+The weakest (smallest) alignment is the alignment of the types \Verb!char!, \Verb!signed char! and \\ \Verb!unsigned char!, which equals 1.
+\par
+An object of type \Verb!int! has large enough size to contain any value in the range \textbf{\texttt{INT\_MIN}} to \textbf{\texttt{INT\_MAX}} as defined in \subsecref{subsec:numlimits}.
+\par
+The values for the alignment requirements and sizes of the scalar types used by \Verb!c-viz! are typical for 32-bit x86 architectures.
+Future versions of \Verb!c-viz! may allow configuration of these values.
+\begin{table}[h]
+\centering
+\begin{tabular}[t]{>{\ttfamily \bfseries}r>{\ttfamily $}l<{$}}
+CHAR\_SIZE   & 1 \\
+SCHAR\_SIZE  & \text{CHAR\_SIZE} \\
+UCHAR\_SIZE  & \text{CHAR\_SIZE} \\
+SHRT\_SIZE   & 2 \\
+USHRT\_SIZE  & \text{SHRT\_SIZE} \\
+INT\_SIZE    & 4 \\
+UINT\_SIZE   & \text{INT\_SIZE} \\
+LONG\_SIZE   & 4 \\
+ULONG\_SIZE  & \text{LONG\_SIZE} \\
+LLONG\_SIZE  & 8 \\
+ULLONG\_SIZE & \text{LLONG\_SIZE} \\
+PTR\_SIZE    & \text{INT\_SIZE} 
+\end{tabular}
+\begin{tabular}[t]{>{\ttfamily \bfseries}r>{\ttfamily $}l<{$}}
+CHAR\_ALIGN   & 2^0 \\
+SCHAR\_ALIGN  & 2^0 \\
+UCHAR\_ALIGN  & \text{CHAR\_ALIGN} \\
+SHRT\_ALIGN   & 2^1 \\
+USHRT\_ALIGN  & \text{SHRT\_ALIGN} \\
+INT\_ALIGN    & 2^2 \\
+UINT\_ALIGN   & \text{INT\_ALIGN} \\
+LONG\_ALIGN   & 2^2 \\
+ULONG\_ALIGN  & \text{LONG\_ALIGN} \\
+LLONG\_ALIGN  & 2^3 \\
+ULLONG\_ALIGN & \text{LLONG\_ALIGN} \\
+PTR\_ALIGN    & \text{INT\_ALIGN} \\
+MAX\_ALIGN    & \text{LLONG\_ALIGN}
+\end{tabular}
+\end{table}
+}
+
+\subsubsection{Representation}\label{subsubsec:typerep}
+\spec{
+Values stored in objects consist of $n\ \times\ $\textbf{\texttt{CHAR\_BIT}} bits, where $n$ is the size of the object in bytes.
+The value may be copied into an object of type \Verb!unsigned char [n]! and the resulting set of bytes is called the \emph{object representation} of the value.
+Two values with the same object representation compare equal, but the converse does not necessarily hold.
+\par
+Padding bytes in structure types take on unspecified values.
+\par
+\deviation{
+Signed integer types use two's complement representation for negative values\tablefootnote{this is a consequence of the underlying implementation using JavaScript's \Verb!BigInt! type, which ``act as two's complement binary strings" for binary operations}.
+}
+}
+
+\subsubsection{Compatible types}\label{subsubsec:compatibletypes}
+\spec{
+Two types have \emph{compatible type} if any of the following hold:
+\begin{itemize}
+    \item the types are the same
+    \item both are structure types such that 
+    \begin{itemize}
+        \item both either have no tag or the same tag
+        \item there is a one-to-one correspondence between their members such that each pair of members are declared with compatible types and the same name
+        \item the corresponding members shall be declared in the same order
+    \end{itemize}
+    \item both are array types such that their element types are compatible and their lengths are equal
+    \item both are pointer types such that their referenced types are compatible
+    \item both are function types such that 
+    \begin{itemize}
+        \item both specify compatible return types
+        \item both have the same arity
+        \item corresponding parameters shall have compatible types
+    \end{itemize}
+\end{itemize}
+}
+
+\subsection{Conversions}\label{subsec:conversions}
+\spec{
+Where an expression is used in a context where a value of different type is expected, \emph{conversion} may occur.
+\par
+\begin{lstlisting}^^J
+int n = 1L; // expression 1L has type long, but int is expected^^J
+char *p = malloc(10); // expression malloc(10) has type void*, but char* is expected^^J
+\end{lstlisting}
+}
+
+\subsubsection{Conversions as if by assignment}
+\spec{
+Provided that the \hyperref[subsubsec:simpleassgn]{simple assignment} constraints hold, the following conversions happen:
+\begin{itemize}
+    \item In the \hyperref[subsec:assgn]{assignment operator}, the value of the right hand operand is converted to the type of the left hand operand.
+    \item When \hyperref[subsec:init]{initializing} an object of scalar type, the value of the initializer expression is converted to the type of the object being initialized.
+    \item In a \hyperref[subsubsec:fncall]{function call} expression, the value of each argument expression is converted to the type of the corresponding parameter.
+    \item In a \hyperref[subsubsec:return]{return} statement, the value of the \Verb!return! expression is converted to an object having the return type of the function.
+\end{itemize}
+}
+
+\subsubsection{Usual arithmetic conversions}
+\spec{
+The operands of the following operators undergo implicit conversions to obtain a common type, in which the calculation is performed:
+\begin{itemize}
+    \item \hyperref[subsec:mult]{multiplicative operators}: \Verb!*, /, \%!
+    \item \hyperref[subsec:add]{additive operators}: \Verb!+, -!
+    \item \hyperref[subsec:rel]{relational operators}: \Verb!<, >, <=, >=!
+    \item \hyperref[subsec:eq]{equality operators}: \Verb|==, !=|
+    \item \hyperref[subsec:bitand]{bitwise AND operator}: \Verb!\&!
+    \item \hyperref[subsec:bitxor]{bitwise exclusive OR operator}: \string^
+    \item \hyperref[subsec:bitor]{bitwise inclusive OR operator}: \Verb!|!
+    \item \hyperref[subsec:cond]{conditional operator}: \Verb!?:!
+\end{itemize}
+\par
+The conversion proceeds as follows:
+\begin{itemize}
+    \item Both operands undergo \hyperref[subsubsubsec:intpromo]{integer promotions}. 
+    \item If the types are the same, we are done.
+    \item Else the types are different:
+    \begin{itemize}
+        \item If the types have the same signedness, the operand whose type has the smaller \emph{conversion rank}\footnote{see \subsubsecref{subsubsubsec:intpromo}} is implicitly converted\footnote{see \subsubsecref{subsubsubsec:intconv}} to the other type.
+        \item Else the operands have different signedness:
+        \begin{itemize}
+            \item If the unsigned type has \emph{conversion rank} greater than or equal to the rank of the signed type, then the operand with the signed type is implicitly converted to the unsigned type.
+            \item Else the unsigned type has \emph{conversion rank} less than the signed type:
+            \begin{itemize}
+                \item If the signed type can represent all values of the unsigned type, then the operand with the unsigned type is implicitly converted to the signed type.
+                \item Else both operands undergo implicit conversion to the unsigned type counterpart of the signed operand's type.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+}
+
+\subsubsection{Value categories}
+\spec{
+Every \hyperref[sec:expr]{expression} in C is characterized by two independent properties: a type and a value category.
+\par
+\deviation{Every expression belongs to one of two value categories: lvalue and rvalue.}
+}
+
+\subsubsection*{Lvalue expressions}\label{subsubsubsec:lvalue}
+\spec{
+A \emph{lvalue} expression is any expression with object type which designates an object.
+\par
+Lvalue expressions can be used in the following contexts:
+\begin{itemize}
+    \item as the operand of the \hyperref[subsubsec:addrindirop]{address-of} operator
+    \item as the operand of the pre/post increment and decrement operators
+    \item as the left-hand operand of the \hyperref[subsubsec:structmem]{member access} (dot) operator
+    \item as the left-hand operand of the \hyperref[subsec:assgn]{assignment} operators
+\end{itemize}
+\par
+If a lvalue expression is used in any context other than \Verb!sizeof! or the operators listed above, non-array lvalues undergo \hyperref[subsubsubsec:lvalueconv]{lvalue conversion}, which loads the value of the object from memory.
+\par
+The following expressions are lvalues:
+\begin{itemize}
+    \item identifiers that do not designate a function
+    \item string literals
+    \item parenthesized expressions $(x)$ if the unparanthesized expression $x$ is a lvalue
+    \item the result of a member access (dot) operator if the left-hand operand is a lvalue
+    \item the result of a member access through pointer \Verb!->! operator
+    \item the result of the indirection \Verb!*! operator applied to a pointer to object
+    \item the result of the subscript \Verb![]! operator 
+\end{itemize}
+}
+
+\subsubsection*{Modifiable lvalue expressions}\label{subsubsubsec:modifiablelvalue}
+\spec{
+A \emph{modifiable lvalue} is any lvalue expression of non-array type.
+\par
+Only modifiable lvalue expressions may be used as the left-hand operand of assignment operators and as operands of increment/decrement operators.
+}
+
+\subsubsection*{Rvalue expressions}\label{subsubsubsec:rvalue}
+\spec{
+A \emph{rvalue} expression is defined by exclusion: an expression is a \emph{rvalue} if it is not a lvalue. The address of a rvalue expression cannot be taken.
+\par
+The following expressions are rvalues:
+\begin{itemize}
+    \item integer and character constants
+    \item all operators not specified to return lvalues, such as
+    \begin{itemize}
+        \item function call expressions
+        \item cast expressions
+        \item member access (dot) operator applied to a non-lvalue structure
+        \item results of all arithmetic, relational, logical and bitwise operators
+        \item results of increment/decrement operators
+        \item results of assignment operators\footnote{lvalue in \Verb!C++!}
+        \item conditional operator
+        \item comma operator
+        \item address-of operator
+    \end{itemize}
+\end{itemize}
+}
+
+\subsubsection{Value transformations}
+\subsubsection*{Lvalue conversion}\label{subsubsubsec:lvalueconv}
+\spec{
+Any \hyperref[subsubsubsec:lvalue]{lvalue} expression of non-array type when used in any context other than
+\begin{itemize}
+    \item as the operand of the address-of operator
+    \item as the operand of the pre/post increment and decrement operators
+    \item as the left-hand operand of the member access (dot) operator
+    \item as the left-hand operand of the assignment operators
+    \item as the operand of \Verb!sizeof!
+\end{itemize}
+undergoes \emph{lvalue conversion}: the type and value remains the same but it loses its lvalue properties. Specifically, the address may no longer be taken.
+\par
+This conversion models the memory load of the object.
+\par
+\begin{lstlisting}^^J
+int x = n; // lvalue conversion on n, loads object from memory^^J
+int *p = &n; // no lvalue conversion, does not read from memory^^J
+\end{lstlisting}
+}
+
+\subsubsection*{Array to pointer conversion}
+\spec{
+Any \hyperref[subsubsubsec:lvalue]{lvalue} expression of array type when used in any context other than
+\begin{itemize}
+    \item as the operand of the address-of operator
+    \item as the operand of the \Verb!sizeof!
+\end{itemize}
+undergoes a conversion to the non-lvalue pointer to its first element.
+\par
+\begin{lstlisting}^^J
+int a[3], b[3][4];^^J
+int *p = a; // conversion to &a[0]^^J
+int (*q)[4] = b; // conversion to &b[0]^^J
+\end{lstlisting}
+}
+
+\subsubsection*{Function to pointer conversion}
+\spec{
+Any function designator expression when used in any context other than
+\begin{itemize}
+    \item as the operand of the address-of operator
+    \item as the operand of the \Verb!sizeof!
+\end{itemize}
+undergoes a conversion to the non-lvalue pointer to the function designated by the expression.
+\par
+\begin{lstlisting}^^J
+void f() \{ return; \}^^J
+void (*p)() = f; // conversion to &f^^J
+(***p)(); // repeated conversion to &f and dereference to f^^J
+\end{lstlisting}
+}
+
+\subsubsection{Implicit conversions}
+\spec{
+\emph{Implicit conversion}, whether as if by assignment or a usual arithmetic conversion, consists of:
+\begin{enumerate}
+    \item value transformation, if applicable
+    \item one of the conversions listed below, if it produces the target type
+\end{enumerate}
+}
+
+\subsubsection*{Compatible types}
+\spec{
+Conversion of a value of any type to any \hyperref[subsubsec:compatibletypes]{compatible type} is a no-op.
+}
+
+\subsubsection*{Integer promotions}\label{subsubsubsec:intpromo}
+\spec{
+\emph{Integer promotion} is the implicit conversion of a value of any integer type with \emph{rank} less than or equal to \emph{rank} of int to the value of type \Verb!int! or \Verb!unsigned int!.
+\par
+If \Verb!int! can represent the entire range of values of the original type, the value is converted to type \Verb!int!. Else, the value is converted to \Verb!unsigned int!.
+\par
+Integer promotions preserve the value, including the sign.
+\par
+\emph{Rank} is a property defined for all integer types:
+\begin{itemize}
+    \item The ranks of all signed integer types are different and increases with their precision.
+    \item The ranks of all signed integer types equal the ranks of their unsigned counterparts.
+    \item The rank of \Verb!char! is equal to the rank of \Verb!signed char! and \Verb!unsigned char!.
+    \item The rank of \Verb!\_Bool! is less than the rank of any other standard integer type.
+    \item Ranking is transitive.
+\end{itemize}
+\par
+The specific values for ranks used by \Verb!c-viz! are given in the following table:
+\begin{table}[h]
+\centering
+\begin{tabular}[t]{>{\ttfamily}r>{$}l<{$}l}
+\toprule
+\textbf{\sffamily Integer Type} & \textbf{\sffamily Rank} \\ \midrule
+\_Bool                & 0             \\
+Char                  & 1             \\
+SignedChar            & 1             \\
+UnsignedChar          & 1             \\
+ShortInt              & 2             \\
+UnsignedShortInt      & 2             \\ \bottomrule
+\end{tabular}
+\hspace{2em}
+\begin{tabular}[t]{>{\ttfamily}r>{$}l<{$}l}
+\toprule
+\textbf{\sffamily Integer Type} & \textbf{\sffamily Rank} \\ \midrule
+Int                   & 3             \\
+UnsignedInt           & 3             \\
+LongInt               & 4             \\
+UnsignedLongInt       & 4             \\
+LongLongInt           & 5             \\
+UnsignedLongLongInt   & 5             \\ \bottomrule
+\end{tabular}
+\end{table}
+\par
+Integer promotions are applied in the following contexts:
+\begin{itemize}
+    \item as part of \emph{usual arithmetic conversions}
+    \item to the operand of the unary arithmetic operators \Verb!+! and \Verb!-!
+    \item to the operand of the unary bitwise operator $\sim$
+    \item to both operands of the shift operators \Verb!<<! and \Verb!>>!
+\end{itemize}
+}
+
+\subsubsection*{Boolean conversions}
+\spec{
+A value of any scalar type can be implicitly converted to \Verb!\_Bool!. Values that compare equal to zero are converted to \Verb!0! and all other values are converted to \Verb!1!.
+}
+
+\subsubsection*{Integer conversions}\label{subsubsubsec:intconv}
+\spec{
+A value of any integer type can be implicitly converted to any other integer type. Except where covered by promotions and boolean conversions above, the following rules apply:
+\begin{itemize}
+    \item if the target type can represent the value, the value is unchanged
+    \item if the target type is unsigned, modulo arithmetic is applied such that the result fits in the target type
+    \item if the target type is signed, the interpreter throws an error
+\end{itemize}
+\par
+\begin{lstlisting}^^J
+char x = 1; // int converted to char, result unchanged^^J
+unsigned char n = -123456; // target is unsigned, result is 192^^J
+signed char m = 123456; // target is signed, error is thrown^^J
+sizeof(int) > -1; // false: operator > applies usual arithmetic conversion^^J
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // target type is unsigned, -1 becomes UINT_MAX^^J
+\end{lstlisting}
+}
+
+\subsubsection*{Pointer conversions}
+\spec{
+A pointer to \Verb!void! can be implicitly converted to and from any pointer to object type.
+If a pointer to object is converted to a pointer to \Verb!void! and back, its value compares equal to the original pointer.
+\begin{lstlisting}^^J
+int *p = malloc(10 * sizeof(int)); // malloc returns void*^^J
+\end{lstlisting}
+\par
+The integer constant expression \Verb!0! can be implicitly converted to any pointer type. The result is a null pointer value of its type, guaranteed to compare unequal to any non-null pointer value of that type.
+\begin{lstlisting}^^J
+int *p = 0;^^J 
+\end{lstlisting}
+}

@@ -1,0 +1,187 @@
+\newpage
+\section{Lexical Grammar}\label{sec:lexgrammar}
+\specsyntax{
+Token :::=
+{\sffamily Keyword} @ {\sffamily Identifier} @ {\sffamily Constant}
+// \hyperref[sec:lexgrammar]{token}
+! {\sffamily StringLiteral} @ {\sffamily Punctuator};;;
+\_ :::=
+\{ {\sffamily WhiteSpace} @ {\sffamily LongComment} @ {\sffamily LineComment} \}
+// token separator
+;;;
+WhiteSpace :::=
+\lstinline{' '} @ \lstinline{'\\n'} @ \lstinline{'\\r'} @ \lstinline{'\\t'} @ \lstinline{'\\u000b'} @ \lstinline{'\\f'};;;
+}
+
+\specsem{
+A \emph{token} is the minimal lexical element of the language.
+\par
+Each token can be separated by \emph{white-space characters} (space, horizontal tab, new-line, vertical tab, and form-feed), comments (\subsecref{subsec:comments}), or both.
+}
+
+\subsection{Keywords}\label{subsec:keywords}
+\specsyntax{
+Keyword :::=
+\lstinline{'auto'} @ \lstinline{'break'} @ \lstinline{'case'} @ \lstinline{'char'} @ \lstinline{'const'} @ \lstinline{'continue'} @ \lstinline{'default'} @ \lstinline{'do'} @ \lstinline{'double'} @ \lstinline{'else'} @ \lstinline{'enum'} @ \lstinline{'extern'} @ \lstinline{'float'} @ \lstinline{'for'} @ \lstinline{'goto'} @ \lstinline{'if'} @ \lstinline{'inline'} @ \lstinline{'int'} @ \lstinline{'long'} @ \lstinline{'register'} @ \lstinline{'restrict'} @ \lstinline{'return'} @ \lstinline{'short'} @ \lstinline{'signed'} @ \lstinline{'sizeof'} @ \lstinline{'static'} @ \lstinline{'struct'} @ \lstinline{'switch'} @ \lstinline{'typedef'} @ \lstinline{'union'} @ \lstinline{'unsigned'} @ \lstinline{'void'} @ \lstinline{'volatile'} @ \lstinline{'while'} @ \lstinline{'\_Alignas'} @ \lstinline{'\_Alignof'} @ \lstinline{'\_Atomic'} @ \lstinline{'\_Bool'} @ \lstinline{'\_Complex'} @ \lstinline{'\_Generic'} @ \lstinline{'\_Imaginary'} @ \lstinline{'\_Noreturn'} @ \lstinline{'\_Static\_assert'} @ \lstinline{'\_Thread\_local'}
+// \hyperref[subsec:keywords]{keyword};;;
+}
+
+\specsem{
+The above tokens (case sensitive) are reserved for use as keywords, and shall not be used otherwise (such as for identifiers).
+}
+
+\subsection{Identifiers}\label{subsec:identifiers}
+\specsyntax{
+Identifier :::=
+{\sffamily IdentifierNondigit} , \{ {\sffamily IdentifierNondigit} @ {\sffamily Digit} \}
+// \hyperref[subsec:identifiers]{identifier};;;
+IdentifierNondigit :::= {\sffamily Nondigit} @ {\sffamily UniversalCharacterName}
+;;;
+Nondigit :::=
+{\it ? lowercase or uppercase alphabet ?} @ \lstinline{'\_'}
+;;;
+Digit :::=
+{\it ? digit from 0 to 9 ?}
+;;;
+}
+
+\specsem{
+An identifier is a sequence of nondigit characters (which includes the underscore \Verb!\_!, the lower and upper case Latin letters, and other characters) and digits, which designates one or more entities as described in \subsecref{subsec:scopes}.
+}
+
+\subsection{Universal character names}\label{subsec:univnames}
+\specsyntax{
+UniversalCharacterName :::=
+! \lstinline{'\\u'} , {\sffamily HexQuad}
+// \hyperref[subsec:univnames]{universal character name}
+! \lstinline{'\\U'} , {\sffamily HexQuad} , {\sffamily HexQuad}
+;;;
+HexQuad :::=
+{\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit};;;
+}
+
+\specsem{
+Universal character names are used in identifiers, character constants and string literals to designate characters that are not in the basic character set.
+}
+
+\subsection{Constants}\label{subsec:constants}
+\specsyntax{
+Constant :::=
+{\sffamily IntegerConstant} @ {\sffamily CharacterConstant}
+// \hyperref[subsec:constants]{constant}
+;;;
+}
+
+\specsem{
+Each constant has a type, determined by its form and value as described later.
+}
+
+\subsubsection{Integer constants}\label{subsubsec:intconstants}
+\specsyntax{
+IntegerConstant :::=
+( {\sffamily DecimalConstant} @ {\sffamily HexadecimalConstant} @ {\sffamily OctalConstant} ) , [ {\sffamily IntegerSuffix} ]
+// \hyperref[subsubsec:intconstants]{integer constant}
+;;;
+DecimalConstant :::=
+{\sffamily NonzeroDigit} , \{ {\sffamily Digit} \};;;
+OctalConstant :::=
+\lstinline{'0'} , \{ {\sffamily OctalDigit} \};;;
+HexadecimalConstant :::=
+{\sffamily HexadecimalPrefix} , {\sffamily HexadecimalDigit} , \newline
+\{ {\sffamily HexadecimalDigit} \};;;
+HexadecimalPrefix :::=
+\lstinline{'0x'} @ \lstinline{'0X'}
+;;;
+NonzeroDigit :::=
+{\it ? digit from 1 to 9 ?}
+;;;
+OctalDigit :::=
+{\it ? digit from 0 to 7 ?}
+;;;
+HexadecimalDigit :::=
+! {\it ? digit from 0 to 9 ?}
+! {\it ? lowercase or uppercase alphabet from a to f ?}
+;;;
+IntegerSuffix :::=
+! {\sffamily UnsignedSuffix} , [ {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ]
+! ( {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ) , [ {\sffamily UnsignedSuffix} ]
+;;;
+UnsignedSuffix :::=
+\lstinline{'u'} @ \lstinline{'U'};;;
+LongSuffix :::=
+\lstinline{'l'} @ \lstinline{'L'};;;
+LongLongSuffix :::=
+\lstinline{'ll'} @ \lstinline{'LL'}
+}
+
+\specsem{
+An integer constant may have a prefix specifying its base and a suffix specifying its type.
+\par
+The type of an integer constant is the first of the corresponding list in which its value can be represented:
+\begin{table}[]
+\centering
+\begin{tabular}[t]{@{}l>{\ttfamily}l>{\ttfamily}l@{}}
+\toprule
+\textbf{Suffix}          & \textbf{\sffamily Decimal Constant}                                                                         & \textbf{\sffamily Octal or Hexadecimal Constant}                                                                                             \\ \midrule
+none                     & \begin{tabular}[c]{@{}l@{}}int\\ long int\\ long long int\end{tabular}                            & \begin{tabular}[c]{@{}l@{}}int\\ unsigned int\\ long int\\ unsigned long int\\ long long int\\ unsigned long long int\end{tabular} \\ \midrule
+u or U                   & \begin{tabular}[c]{@{}l@{}}unsigned int\\ unsigned long int\\ unsigned long long int\end{tabular} & \begin{tabular}[c]{@{}l@{}}unsigned int\\ unsigned long int\\ unsigned long long int\end{tabular}                                  \\ \midrule
+l or L                   & \begin{tabular}[c]{@{}l@{}}long int\\ long long int\end{tabular}                                  & \begin{tabular}[c]{@{}l@{}}long int\\ unsigned long int\\ long long int\\ unsigned long long int\end{tabular}                      \\ \midrule
+Both u or U and l or L   & \begin{tabular}[c]{@{}l@{}}unsigned long int\\ unsigned long long int\end{tabular}                & \begin{tabular}[c]{@{}l@{}}unsigned long int\\ unsigned long long int\end{tabular}                                                 \\ \midrule
+ll or LL                 & long long int                                                                                     & \begin{tabular}[c]{@{}l@{}}long long int\\ unsigned long long int\end{tabular}                                                     \\ \midrule
+Both u or U and ll or LL & unsigned long long int                                                                            & unsigned long long int                                                                                                             \\ \bottomrule
+\end{tabular}
+\end{table}
+}
+
+\subsubsection{Character constants}\label{subsubsec:charconstants}
+\specsyntax{
+CharacterConstant :::=
+\lstinline{'''} , {\sffamily CChar} , \lstinline{'''}
+// \hyperref[subsubsec:charconstants]{character constant}
+;;;
+CChar :::=
+! {\sffamily EscapeSequence}
+! {\it ? UTF-16 char ?} - ( \lstinline{'''} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
+;;;
+EscapeSequence :::=
+! {\sffamily SimpleEscapeSequence} @ {\sffamily OctalEscapeSequence} @ {\sffamily HexadecimalEscapeSequence} @ {\sffamily UniversalCharacterName}
+;;;
+SimpleEscapeSequence :::=
+\lstinline{'\\'} , ( \lstinline{'''} @ \lstinline{'"'} @ \lstinline{'\?'} @ \lstinline{'\\'} @ \lstinline{'a'} @ \lstinline{'b'} @ \lstinline{'f'} @ \lstinline{'n'} @ \lstinline{'r'} @ \lstinline{'t'} @ \lstinline{'v'} );;;
+OctalEscapeSequence :::=
+\lstinline{'\\'} , {\sffamily OctalDigit} , [ {\sffamily OctalDigit} ] , [ {\sffamily OctalDigit} ];;;
+HexadecimalEscapeSequence :::=
+\lstinline{'\\x'} , {\sffamily HexadecimalDigit} , \{ {\sffamily HexadecimalDigit} \};;;
+}
+
+\subsection{String literals}\label{subsec:stringlit}
+\specsyntax{
+StringLiteral :::=
+\lstinline{'"'} , [ {\sffamily SCharSequence} ] , \lstinline{'"'}
+// \hyperref[subsec:stringlit]{string literal}
+;;;
+SCharSequence :::=
+{\sffamily SChar} , \{ {\sffamily SChar} \};;;
+SChar :::=
+! {\sffamily EscapeSequence}
+! {\it ? UTF-16 char ?} - ( \lstinline{'"'} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
+;;;
+}
+
+\subsection{Punctuators}\label{subsec:punctuators}
+\specsyntax{
+Punctuator :::=
+\lstinline{'['} @ \lstinline{']'} @ \lstinline{'('} @ \lstinline{')'} @ \lstinline{'\{'} @ \lstinline{'\}'} @ \lstinline{'.'} @ \lstinline{'->'} @ \lstinline{'++'} @ \lstinline{'--'} @ \lstinline{'\&'} @ \lstinline{'*'} @ \lstinline{'+'} @ \lstinline{'-'} @ \lstinline{'~'} @ \lstinline{'\!'} @ \lstinline{'\/'} @ \lstinline{'\%'} @ \lstinline{'<<'} @ \lstinline{'>>'} @ \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} @ \lstinline{'=='} @ \lstinline{'\!='} @ \lstinline{'^'} @ \lstinline{'|'} @ \lstinline{'\&\&'} @ \lstinline{'||'} @ \lstinline{'\?'} @ \lstinline{':'} @ \lstinline{';'} @ \lstinline{'...'} @ \lstinline{'='} @ \lstinline{'*='} @ \lstinline{'\/='} @ \lstinline{'\%='} @ \lstinline{'+='} @ \lstinline{'-='} @ \lstinline{'<<='} @ \lstinline{'>>='} @ \lstinline{'\&='} @ \lstinline{'^='} @ \lstinline{'|='} @ \lstinline{','} @ \lstinline{'\#'} @ \lstinline{'\#\#'} @ \lstinline{'<:'} @ \lstinline{':>'} @ \lstinline{'<\%'} @ \lstinline{'\%>'} @ \lstinline{'\%:'} @ \lstinline{'\%:\%:'}
+// \hyperref[subsec:punctuators]{punctuator}
+}
+
+\subsection{Comments}\label{subsec:comments}
+\specsyntax{
+LongComment :::=
+\lstinline{'\/*'} , \{ {\it ? UTF-16 char ?} - \lstinline{'*\/'} \} , \lstinline{'*\/'}
+// \hyperref[subsec:comments]{comment};;;
+LineComment :::=
+\lstinline{'\/\/'} , \{ {\it ? UTF-16 char ?} - \lstinline{'\\n'} \}
+// \hyperref[subsec:comments]{comment};;;
+}
+

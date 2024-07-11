@@ -3,16 +3,16 @@
 \addcontentsline{toc}{section}{Introduction}
 \markright{INTRODUCTION}
 
-This document follows the structure of (and frequently refers to) the ISO/IEC
+This document follows the structure of (and frequently refers to\footnote{certain definitions and wordings may be lifted \emph{verbatim} from the standard}) the ISO/IEC
 9899:1999 - n1256 version of the C99 standard\footnote{\href{https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf}{https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf}}.
-Where applicable, we express grammars using Extended Backus–Naur form\footnote{We use $\Coloneqq$ for definition, \lstinline{,} for concatenation, \lstinline{|} for alternation, $[\ x\ ]$ for optional $x$, $\{\ x\ \}$ for zero or more repetitions of $x$, $(\ \dots\ )$ for grouping, {\textsf `}$\dots${\textsf '} for terminals, $-$ for negation and {\textsf ?}$\dots${\textsf ?} for special sequences.}, adopting the ISO/IEC 14977 standard proposed by R. S. Scowen.
+Where applicable, we express grammars using Extended Backus–Naur form\footnote{we use $\Coloneqq$ for definition, \lstinline{,} for concatenation, \lstinline{|} for alternation, $[\ x\ ]$ for optional $x$, $\{\ x\ \}$ for zero or more repetitions of $x$, $(\ \dots\ )$ for grouping, {\textsf `}$\dots${\textsf '} for terminals, $-$ for negation and {\textsf ?}$\dots${\textsf ?} for special sequences.}, adopting the ISO/IEC 14977 standard proposed by R. S. Scowen.
 \par
 \deviation{
-Deviations from the \Verb!C! standard will be on their own paragraph and highlighted like this.
+Deviations from the \Verb!C! standard will be on their own paragraph and highlighted as such.
 }
 \vspace{10pt}
 \par
 \Secref{sec:concepts} describes various language concepts, such as scopes of identifiers and types.
 \Secref{sec:lexgrammar} to \secref{sec:extdef} detail the syntax, type checking constraints and semantics of various language constructs.
-In \secref{sec:memory} we look at the memory related runtime data structures implemented in the interpreter.
+In \secref{sec:memory} we look at the the various memory segments and memory related runtime data structures implemented in the interpreter.
 Lastly, an informal description of the big step operational semantics of the language is provided in \secref{sec:opsem}.

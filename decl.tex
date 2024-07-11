@@ -1,0 +1,145 @@
+\newpage
+\section{Declarations}\label{sec:decl}
+\specsyntax[98mm]{
+Declaration :::=
+{\sffamily DeclarationSpecifiers} , [ {\sffamily InitDeclaratorList} ] , \lstinline{';'}
+// \hyperref[sec:decl]{declaration}
+;;;
+DeclarationSpecifiers :::=
+( {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
+\{ {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
+;;;
+InitDeclaratorList :::=
+{\sffamily InitDeclarator} , \{ \lstinline{','} , {\sffamily InitDeclarator} \};;;
+InitDeclarator :::=
+{\sffamily Declarator} , [ \lstinline{'='} , {\sffamily Initializer} ];;;
+}
+
+\subsection{Storage-class specifiers}\label{subsec:storageclassspec}
+\specsyntax{
+StorageClassSpecifier :::=
+\lstinline{'typedef'}
+// \hyperref[subsec:storageclassspec]{storage class specifier}
+;;;
+}
+
+\subsection{Type specifiers}\label{subsec:typespec}
+\specsyntax[98mm]{
+TypeSpecifier :::=
+! \lstinline{'void'}
+@ \lstinline{'char'}
+@ \lstinline{'short'}
+@ \lstinline{'int'}
+@ \lstinline{'long'}
+@ \lstinline{'signed'}
+// \hyperref[subsec:typespec]{type specifiers}
+! \lstinline{'unsigned'}
+@ \lstinline{'\_Bool'}
+@ {\sffamily StructOrUnionSpecifier}
+;;;
+}
+
+\subsubsection{Structure specifiers}\label{subsubsec:structspec}
+\specsyntax[98mm]{
+StructOrUnionSpecifier :::=
+! \lstinline{'struct'} , [ {\sffamily Identifier} ] , \newline
+\lstinline{'\{'} , {\sffamily StructDeclarationList} , \lstinline{'\}'}
+// \hyperref[subsubsec:structspec]{structure specifier}
+! \lstinline{'struct'} , {\sffamily Identifier}
+// \hyperref[subsubsec:tags]{tags}
+;;;
+StructDeclarationList :::=
+{\sffamily StructDeclaration} , \{ {\sffamily StructDeclaration} \};;;
+StructDeclaration :::=
+{\sffamily SpecifierQualifierList} , [ {\sffamily StructDeclaratorList} ] , \lstinline{';'}
+;;;
+SpecifierQualifierList :::=
+( {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
+\{ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
+;;;
+StructDeclaratorList :::=
+{\sffamily StructDeclarator} , \{ \lstinline{','} , {\sffamily StructDeclarator} \};;;
+StructDeclarator :::=
+{\sffamily Declarator}
+;;;
+}
+
+\subsubsection{Tags}\label{subsubsec:tags}
+\subsection{Declarators}\label{subsec:declarator}
+\specsyntax{
+Declarator :::=
+[ {\sffamily Pointer} ] , {\sffamily DirectDeclarator}
+// \hyperref[subsec:declarator]{declarator}
+;;;
+DirectDeclarator :::=
+( {\sffamily Identifier} @  ( \lstinline{'('} , {\sffamily Declarator} , \lstinline{')'} )  ) , \newline
+\{ {\sffamily DirectDeclaratorPart} \}
+;;;
+DirectDeclaratorPart :::=
+! \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'}
+// \hyperref[subsubsec:arrdecl]{array declarator}
+! \lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'}
+// \hyperref[subsubsec:fndecl]{function declarator}
+;;;
+Pointer :::=
+\lstinline{'*'} , \{ \lstinline{'*'} \}
+// \hyperref[subsubsec:ptrdecl]{pointer declarator}
+;;;
+ParameterList :::=
+{\sffamily ParameterDeclaration} , \newline
+\{ \lstinline{','} , {\sffamily ParameterDeclaration} \};;;
+ParameterDeclaration :::=
+{\sffamily DeclarationSpecifiers} , \newline
+[ {\sffamily Declarator} @ {\sffamily AbstractDeclarator} ];;;
+}
+
+\subsubsection{Pointer declarators}\label{subsubsec:ptrdecl}
+\subsubsection{Array declarators}\label{subsubsec:arrdecl}
+\subsubsection{Function declarators}\label{subsubsec:fndecl}
+\subsection{Type names}\label{subsec:typenames}
+\specsyntax{
+TypeName :::=
+{\sffamily SpecifierQualifierList} , [ {\sffamily AbstractDeclarator} ]
+// \hyperref[subsec:typenames]{type name}
+;;;
+AbstractDeclarator :::=
+! [ {\sffamily Pointer} ] , {\sffamily DirectAbstractDeclarator}
+! {\sffamily Pointer}
+;;;
+DirectAbstractDeclarator :::=
+! \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'}
+! [ \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'} ] , \newline
+( \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
+\lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} ) , \newline
+\{ \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
+\lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} \}
+;;;
+}
+
+\subsection{Type definitions}\label{subsec:typedefs}
+\specsyntax{
+TypedefName :::=
+{\sffamily Identifier}
+// \hyperref[subsec:typedefs]{type definition}
+;;;
+}
+
+\subsection{Initialization}\label{subsec:init}
+\specsyntax{
+Initializer :::=
+! {\sffamily AssignmentExpression}
+// \hyperref[subsec:init]{initialization}
+! \lstinline{'\{'} , {\sffamily InitializerList} , [ \lstinline{','} ] , \lstinline{'\}'}
+;;;
+InitializerList :::=
+[ {\sffamily Designation} ] , {\sffamily Initializer} , \newline
+\{ \lstinline{','} , [ {\sffamily Designation} ] , {\sffamily Initializer} \};;;
+Designation :::=
+{\sffamily DesignatorList} , \lstinline{'='};;;
+DesignatorList :::=
+{\sffamily Designator} , \{ {\sffamily Designator} \};;;
+Designator :::=
+! \lstinline{'['} , {\sffamily IntegerConstant} , \lstinline{']'}
+! \lstinline{'.'} , {\sffamily Identifier}
+}
+

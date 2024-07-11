@@ -1,0 +1,85 @@
+\newpage
+\section{Memory Model}\label{sec:memory}
+\spec{
+The memory available to a \Verb!c-viz! program is a contiguous sequence of bytes\footnote{backed by JavaScript's \Verb!ArrayBuffer!}, each of which has a unique 32-bit address.
+The lowest address is \Verb!0!, and the highest address is \texttt{\textbf{INT\_MAX}}.
+}
+
+\subsection{Memory segmentation}
+\spec{
+The memory is divided into four non-overlapping segments: stack, heap, data, and text.
+\par
+Attempting to access an address that falls outside of any of the segments causes a \emph{segmentation fault} to be thrown.
+\par
+\deviation{Misaligned memory access throws an error.}
+}
+
+\subsection{Stack allocations}
+\spec{
+Unlike typical x86 architectures, stack memory grows upwards (addresses are allocated in increasing order).
+\par
+The size of a stack frame is calculated by recursively scanning out all declarations made in the function body (and any blocks within).
+\par
+No control-flow analysis is done to reduce the size of stack frames needed. As an example, consider the following code
+\begin{lstlisting}^^J
+if (...) \{^^J
+\ \ // block A^^J
+\} else (...) \{^^J
+\ \ // block B^^J
+\}^^J
+\end{lstlisting}
+Let $S_A$ and $S_B$ denote the size of blocks A and B respectively.
+Then the resulting stack frame will be of size $S_F = p_0 + S_A + p_1 + S_B$ where $p_i$ are sizes of padding bytes.
+A smarter allocation algorithm will only require $S_F = \max \{p_0 + S_A, p_1 + S_B\}$ bytes.
+}
+
+\subsection{Heap allocations}\label{subsec:memmgtfns}
+\spec{
+\deviation{
+The order and contiguity of storage allocated by successive calls to the \Verb!malloc! function is specified by a first-fit allocation algorithm.
+}
+\par
+The pointer returned by a successful allocation is suitably aligned so that it may be assigned to a pointer to any type of object.
+Specifically, the pointer contains an address with alignment \texttt{\textbf{MAX\_ALIGN}}\footnote{see \subsubsecref{subsubsec:sizealign}}.
+\par
+The lifetime of an allocated object extends from the allocation until the deallocation.
+\par
+Pointers returned are guaranteed to point to disjoint objects and contain the starting address of the allocated memory. If allocation fails, a null pointer is returned.
+\par
+\deviation{
+If the size of memory requested is a non-positive integer, a null pointer is returned.
+}
+}
+
+\subsubsection{The \texttt{malloc} function}
+\spec{
+\begin{lstlisting}^^J
+void *malloc(int size);^^J
+\end{lstlisting}
+\par
+The \Verb!malloc! function allocates \Verb!size! bytes of memory of indeterminate value.
+\par
+The \Verb!malloc! function returns a pointer to the allocated memory if allocation was successful, and a null pointer otherwise.
+}
+
+\subsubsection{The \texttt{free} function}
+\spec{
+\begin{lstlisting}^^J
+void free(void *ptr);^^J
+\end{lstlisting}
+\par
+The \Verb!free! function deallocates the memory pointed to by \Verb!ptr!.
+\par
+\deviation{
+If the \Verb!ptr! argument\tablefootnote{including the case where \Verb!ptr! is a null pointer} does not match a pointer earlier returned by the \Verb!malloc! function, the interpreter throws a \Verb!"free on address not returned by malloc"! error.
+}
+}
+
+\subsection{Text and data}
+\spec{
+The text segment is read-only and is the only segment that can be executed.
+}
+
+\subsection{Additional runtime data structures}
+\subsubsection{\texttt{EffectiveTypeTable}}
+\subsubsection{\texttt{InitializedTable}}

@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
-\usepackage[showframe=true]{geometry}
-% \usepackage{geometry}
+% \usepackage[showframe=true]{geometry}
+\usepackage{geometry}
 \geometry{a4paper,top=1in,bottom=1in,left=1.2in,right=1.2in}
 
 \usepackage[dvipsnames]{xcolor}
@@ -119,7 +119,7 @@
     linkcolor=BrickRed
 }
 
-\newcommand{\specsyntax}[2][90mm]{
+\newcommand{\specsyntax}[2][92mm]{
     \subsubsection*{Syntax}
     \centerline{
         \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,#1]Q[l]}]
@@ -191,14 +191,29 @@
 %     #1%
 %   \endgroup
 % }
-\lstset{language=C,xleftmargin=10pt,belowskip=0pt,basicstyle=\ttfamily\footnotesize,commentstyle=\sffamily\itshape,columns=fullflexible}
+\lstset{language=C,xleftmargin=10pt,belowskip=0pt,basicstyle=\ttfamily,commentstyle=\sffamily\itshape,columns=fullflexible}
 
 \usepackage{array}
 
+\usepackage{enumitem}
+\renewcommand\labelitemi{---}
+\setlist[itemize]{topsep=0pt, itemsep=0pt}
+\setlist[enumerate]{topsep=0pt, itemsep=0pt}
+
+\usepackage[
+placement=top,
+angle=0,
+color=black!40,
+scale=2,
+hshift=118,
+vshift=-5
+]{background}
+\backgroundsetup{contents={DRAFT 1}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Metadata %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{%
-  \textsf{c-viz} --- Specification for \texttt{v0.1.1}%
-  \footnote{Source code made available at this \href{https://github.com/caipng/c-viz/tree/d1f985e7ef38a52ca8c50dae77cd190145ecdfb2}{public repository}}}
+  \textsf{c-viz} --- Specification for \texttt{v0.1.2}%
+  \footnote{Source code made available at this \href{https://github.com/caipng/c-viz/releases/tag/v0.1.2}{public repository}}}
 \author{Cai Kai'An\footnote{E-mail: %
   \href{mailto:kaian531@gmail.com}{\texttt{kaian531@gmail.com}}}}
 \date{26/04/2024}
@@ -228,23 +243,18 @@ This document specifies the subset of \verb|C| supported.
   \tableofcontents
 \endgroup
 
-\bigskip
-
 \input{intro}
 \input{concepts}
-
-\section{Lexical Grammar}\label{sec:lexgrammar}
-\section{Expressions}\label{sec:expr}
-\section{Declarations}\label{sec:decl}
-\section{Statements}\label{sec:stmt}
-
+\input{lexgram}
+\input{expr}
+\input{decl}
+\input{stmt}
 \input{extdef}
+\input{memory}
+\input{opsem}
 
-\section{Memory Model}\label{sec:memory}
-\section{Operational Semantics}\label{sec:opsem}
-
-\newpage
 \appendix
 \input{syntax}
+% \input{ast}
 
 \end{document}

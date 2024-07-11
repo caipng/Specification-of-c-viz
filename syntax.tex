@@ -1,3 +1,4 @@
+\newpage
 \section{Language Syntax Summary}
 
 Refer to \secref{sec:intro} for an explanation of the notation used.
@@ -5,381 +6,441 @@ Refer to \secref{sec:intro} for an explanation of the notation used.
 \subsection{Lexical Grammar}
 \medskip
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
-    Token :::=
-    {\sffamily Keyword} @ {\sffamily Identifier} @ {\sffamily Constant}
-    ! {\sffamily StringLiteral} @ {\sffamily Punctuator};;;
-    \_ :::=
-    \{ {\sffamily WhiteSpace} @ {\sffamily LongComment} @ {\sffamily LineComment} \}
-    // token separator
-    ;;;
-    WhiteSpace :::=
-    \lstinline{' '} @ \lstinline{'\\n'} @ \lstinline{'\\r'} @ \lstinline{'\\t'} @ \lstinline{'\\u000b'} @ \lstinline{'\\f'};;;
-    LongComment :::=
-    \lstinline{'\/*'} , \{ {\it ? UTF-16 char ?} - \lstinline{'*\/'} \} , \lstinline{'*\/'};;;
-    LineComment :::=
-    \lstinline{'\/\/'} , \{ {\it ? UTF-16 char ?} - \lstinline{'\\n'} \};;;
-    Keyword :::=
-    \lstinline{'auto'} @ \lstinline{'break'} @ \lstinline{'case'} @ \lstinline{'char'} @ \lstinline{'const'} @ \lstinline{'continue'} @ \lstinline{'default'} @ \lstinline{'do'} @ \lstinline{'double'} @ \lstinline{'else'} @ \lstinline{'enum'} @ \lstinline{'extern'} @ \lstinline{'float'} @ \lstinline{'for'} @ \lstinline{'goto'} @ \lstinline{'if'} @ \lstinline{'inline'} @ \lstinline{'int'} @ \lstinline{'long'} @ \lstinline{'register'} @ \lstinline{'restrict'} @ \lstinline{'return'} @ \lstinline{'short'} @ \lstinline{'signed'} @ \lstinline{'sizeof'} @ \lstinline{'static'} @ \lstinline{'struct'} @ \lstinline{'switch'} @ \lstinline{'typedef'} @ \lstinline{'union'} @ \lstinline{'unsigned'} @ \lstinline{'void'} @ \lstinline{'volatile'} @ \lstinline{'while'} @ \lstinline{'\_Alignas'} @ \lstinline{'\_Alignof'} @ \lstinline{'\_Atomic'} @ \lstinline{'\_Bool'} @ \lstinline{'\_Complex'} @ \lstinline{'\_Generic'} @ \lstinline{'\_Imaginary'} @ \lstinline{'\_Noreturn'} @ \lstinline{'\_Static\_assert'} @ \lstinline{'\_Thread\_local'};;;
-    Identifier :::=
-    {\sffamily IdentifierNondigit} , \{ {\sffamily IdentifierNondigit} @ {\sffamily Digit} \};;;
-    IdentifierNondigit :::= {\sffamily Nondigit} @ {\sffamily UniversalCharacterName}
-    ;;;
-    Nondigit :::=
-    {\it ? lowercase or uppercase alphabet ?} @ \lstinline{'\_'}
-    ;;;
-    Digit :::=
-    {\it ? digit from 0 to 9 ?}
-    ;;;
-    UniversalCharacterName :::=
-    ! \lstinline{'\\u'} , {\sffamily HexQuad}
-    ! \lstinline{'\\U'} , {\sffamily HexQuad} , {\sffamily HexQuad}
-    ;;;
-    HexQuad :::=
-    {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit};;;
-    Constant :::=
-    {\sffamily IntegerConstant} @ {\sffamily CharacterConstant};;;
-    IntegerConstant :::=
-    ( {\sffamily DecimalConstant} @ {\sffamily HexadecimalConstant} @ {\sffamily OctalConstant} ) , [ {\sffamily IntegerSuffix} ];;;
-    DecimalConstant :::=
-    {\sffamily NonzeroDigit} , \{ {\sffamily Digit} \};;;
-    OctalConstant :::=
-    \lstinline{'0'} , \{ {\sffamily OctalDigit} \};;;
-    HexadecimalConstant :::=
-    {\sffamily HexadecimalPrefix} , {\sffamily HexadecimalDigit} , \newline
-    \{ {\sffamily HexadecimalDigit} \};;;
-    HexadecimalPrefix :::=
-    \lstinline{'0x'} @ \lstinline{'0X'}
-    ;;;
-    NonzeroDigit :::=
-    {\it ? digit from 1 to 9 ?}
-    ;;;
-    OctalDigit :::=
-    {\it ? digit from 0 to 7 ?}
-    ;;;
-    HexadecimalDigit :::=
-    ! {\it ? digit from 0 to 9 ?}
-    ! {\it ? lowercase or uppercase alphabet from a to f ?}
-    ;;;
-    IntegerSuffix :::=
-    ! {\sffamily UnsignedSuffix} , [ {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ]
-    ! ( {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ) , [ {\sffamily UnsignedSuffix} ]
-    ;;;
-    UnsignedSuffix :::=
-    \lstinline{'u'} @ \lstinline{'U'};;;
-    LongSuffix :::=
-    \lstinline{'l'} @ \lstinline{'L'};;;
-    LongLongSuffix :::=
-    \lstinline{'ll'} @ \lstinline{'LL'}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
+Token :::=
+{\sffamily Keyword} @ {\sffamily Identifier} @ {\sffamily Constant}
+// \hyperref[sec:lexgrammar]{token}
+! {\sffamily StringLiteral} @ {\sffamily Punctuator};;;
+\_ :::=
+\{ {\sffamily WhiteSpace} @ {\sffamily LongComment} @ {\sffamily LineComment} \}
+// token separator
+;;;
+WhiteSpace :::=
+\lstinline{' '} @ \lstinline{'\\n'} @ \lstinline{'\\r'} @ \lstinline{'\\t'} @ \lstinline{'\\u000b'} @ \lstinline{'\\f'};;;
+LongComment :::=
+\lstinline{'\/*'} , \{ {\it ? UTF-16 char ?} - \lstinline{'*\/'} \} , \lstinline{'*\/'}
+// \hyperref[subsec:comments]{comment};;;
+LineComment :::=
+\lstinline{'\/\/'} , \{ {\it ? UTF-16 char ?} - \lstinline{'\\n'} \}
+// \hyperref[subsec:comments]{comment};;;
+Keyword :::=
+\lstinline{'auto'} @ \lstinline{'break'} @ \lstinline{'case'} @ \lstinline{'char'} @ \lstinline{'const'} @ \lstinline{'continue'} @ \lstinline{'default'} @ \lstinline{'do'} @ \lstinline{'double'} @ \lstinline{'else'} @ \lstinline{'enum'} @ \lstinline{'extern'} @ \lstinline{'float'} @ \lstinline{'for'} @ \lstinline{'goto'} @ \lstinline{'if'} @ \lstinline{'inline'} @ \lstinline{'int'} @ \lstinline{'long'} @ \lstinline{'register'} @ \lstinline{'restrict'} @ \lstinline{'return'} @ \lstinline{'short'} @ \lstinline{'signed'} @ \lstinline{'sizeof'} @ \lstinline{'static'} @ \lstinline{'struct'} @ \lstinline{'switch'} @ \lstinline{'typedef'} @ \lstinline{'union'} @ \lstinline{'unsigned'} @ \lstinline{'void'} @ \lstinline{'volatile'} @ \lstinline{'while'} @ \lstinline{'\_Alignas'} @ \lstinline{'\_Alignof'} @ \lstinline{'\_Atomic'} @ \lstinline{'\_Bool'} @ \lstinline{'\_Complex'} @ \lstinline{'\_Generic'} @ \lstinline{'\_Imaginary'} @ \lstinline{'\_Noreturn'} @ \lstinline{'\_Static\_assert'} @ \lstinline{'\_Thread\_local'}
+// \hyperref[subsec:keywords]{keyword};;;
+Identifier :::=
+{\sffamily IdentifierNondigit} , \{ {\sffamily IdentifierNondigit} @ {\sffamily Digit} \}
+// \hyperref[subsec:identifiers]{identifier};;;
+IdentifierNondigit :::= {\sffamily Nondigit} @ {\sffamily UniversalCharacterName}
+;;;
+Nondigit :::=
+{\it ? lowercase or uppercase alphabet ?} @ \lstinline{'\_'}
+;;;
+Digit :::=
+{\it ? digit from 0 to 9 ?}
+;;;
+UniversalCharacterName :::=
+! \lstinline{'\\u'} , {\sffamily HexQuad}
+// \hyperref[subsec:univnames]{universal character name}
+! \lstinline{'\\U'} , {\sffamily HexQuad} , {\sffamily HexQuad}
+;;;
+HexQuad :::=
+{\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit} , {\sffamily HexadecimalDigit};;;
+Constant :::=
+{\sffamily IntegerConstant} @ {\sffamily CharacterConstant}
+// \hyperref[subsec:constants]{constant}
+;;;
+IntegerConstant :::=
+( {\sffamily DecimalConstant} @ {\sffamily HexadecimalConstant} @ {\sffamily OctalConstant} ) , [ {\sffamily IntegerSuffix} ]
+// \hyperref[subsubsec:intconstants]{integer constant}
+;;;
+DecimalConstant :::=
+{\sffamily NonzeroDigit} , \{ {\sffamily Digit} \};;;
+OctalConstant :::=
+\lstinline{'0'} , \{ {\sffamily OctalDigit} \};;;
+HexadecimalConstant :::=
+{\sffamily HexadecimalPrefix} , {\sffamily HexadecimalDigit} , \newline
+\{ {\sffamily HexadecimalDigit} \};;;
+HexadecimalPrefix :::=
+\lstinline{'0x'} @ \lstinline{'0X'}
+;;;
+NonzeroDigit :::=
+{\it ? digit from 1 to 9 ?}
+;;;
+OctalDigit :::=
+{\it ? digit from 0 to 7 ?}
+;;;
+HexadecimalDigit :::=
+! {\it ? digit from 0 to 9 ?}
+! {\it ? lowercase or uppercase alphabet from a to f ?}
+;;;
+IntegerSuffix :::=
+! {\sffamily UnsignedSuffix} , [ {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ]
+! ( {\sffamily LongLongSuffix} @ {\sffamily LongSuffix} ) , [ {\sffamily UnsignedSuffix} ]
+;;;
+UnsignedSuffix :::=
+\lstinline{'u'} @ \lstinline{'U'};;;
+LongSuffix :::=
+\lstinline{'l'} @ \lstinline{'L'};;;
+LongLongSuffix :::=
+\lstinline{'ll'} @ \lstinline{'LL'}
+\end{bnf}
 }
 
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
-    CharacterConstant :::=
-    \lstinline{'''} , {\sffamily CChar} , \lstinline{'''};;;
-    CChar :::=
-    ! {\sffamily EscapeSequence}
-    ! {\it ? UTF-16 char ?} - ( \lstinline{'''} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
-    ;;;
-    EscapeSequence :::=
-    ! {\sffamily SimpleEscapeSequence} @ {\sffamily OctalEscapeSequence} @ {\sffamily HexadecimalEscapeSequence} @ {\sffamily UniversalCharacterName}
-    ;;;
-    SimpleEscapeSequence :::=
-    \lstinline{'\\'} , ( \lstinline{'''} @ \lstinline{'"'} @ \lstinline{'\?'} @ \lstinline{'\\'} @ \lstinline{'a'} @ \lstinline{'b'} @ \lstinline{'f'} @ \lstinline{'n'} @ \lstinline{'r'} @ \lstinline{'t'} @ \lstinline{'v'} );;;
-    OctalEscapeSequence :::=
-    \lstinline{'\\'} , {\sffamily OctalDigit} , [ {\sffamily OctalDigit} ] , [ {\sffamily OctalDigit} ];;;
-    HexadecimalEscapeSequence :::=
-    \lstinline{'\\x'} , {\sffamily HexadecimalDigit} , \{ {\sffamily HexadecimalDigit} \};;;
-    StringLiteral :::=
-    \lstinline{'"'} , [ {\sffamily SCharSequence} ] , \lstinline{'"'};;;
-    SCharSequence :::=
-    {\sffamily SChar} , \{ {\sffamily SChar} \};;;
-    SChar :::=
-    ! {\sffamily EscapeSequence}
-    ! {\it ? UTF-16 char ?} - ( \lstinline{'"'} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
-    ;;;
-    Punctuator :::=
-    \lstinline{'['} @ \lstinline{']'} @ \lstinline{'('} @ \lstinline{')'} @ \lstinline{'\{'} @ \lstinline{'\}'} @ \lstinline{'.'} @ \lstinline{'->'} @ \lstinline{'++'} @ \lstinline{'--'} @ \lstinline{'\&'} @ \lstinline{'*'} @ \lstinline{'+'} @ \lstinline{'-'} @ \lstinline{'~'} @ \lstinline{'\!'} @ \lstinline{'\/'} @ \lstinline{'\%'} @ \lstinline{'<<'} @ \lstinline{'>>'} @ \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} @ \lstinline{'=='} @ \lstinline{'\!='} @ \lstinline{'^'} @ \lstinline{'|'} @ \lstinline{'\&\&'} @ \lstinline{'||'} @ \lstinline{'\?'} @ \lstinline{':'} @ \lstinline{';'} @ \lstinline{'...'} @ \lstinline{'='} @ \lstinline{'*='} @ \lstinline{'\/='} @ \lstinline{'\%='} @ \lstinline{'+='} @ \lstinline{'-='} @ \lstinline{'<<='} @ \lstinline{'>>='} @ \lstinline{'\&='} @ \lstinline{'^='} @ \lstinline{'|='} @ \lstinline{','} @ \lstinline{'\#'} @ \lstinline{'\#\#'} @ \lstinline{'<:'} @ \lstinline{':>'} @ \lstinline{'<\%'} @ \lstinline{'\%>'} @ \lstinline{'\%:'} @ \lstinline{'\%:\%:'}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
+CharacterConstant :::=
+\lstinline{'''} , {\sffamily CChar} , \lstinline{'''}
+// \hyperref[subsubsec:charconstants]{character constant}
+;;;
+CChar :::=
+! {\sffamily EscapeSequence}
+! {\it ? UTF-16 char ?} - ( \lstinline{'''} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
+;;;
+EscapeSequence :::=
+! {\sffamily SimpleEscapeSequence} @ {\sffamily OctalEscapeSequence} @ {\sffamily HexadecimalEscapeSequence} @ {\sffamily UniversalCharacterName}
+;;;
+SimpleEscapeSequence :::=
+\lstinline{'\\'} , ( \lstinline{'''} @ \lstinline{'"'} @ \lstinline{'\?'} @ \lstinline{'\\'} @ \lstinline{'a'} @ \lstinline{'b'} @ \lstinline{'f'} @ \lstinline{'n'} @ \lstinline{'r'} @ \lstinline{'t'} @ \lstinline{'v'} );;;
+OctalEscapeSequence :::=
+\lstinline{'\\'} , {\sffamily OctalDigit} , [ {\sffamily OctalDigit} ] , [ {\sffamily OctalDigit} ];;;
+HexadecimalEscapeSequence :::=
+\lstinline{'\\x'} , {\sffamily HexadecimalDigit} , \{ {\sffamily HexadecimalDigit} \};;;
+StringLiteral :::=
+\lstinline{'"'} , [ {\sffamily SCharSequence} ] , \lstinline{'"'}
+// \hyperref[subsec:stringlit]{string literal}
+;;;
+SCharSequence :::=
+{\sffamily SChar} , \{ {\sffamily SChar} \};;;
+SChar :::=
+! {\sffamily EscapeSequence}
+! {\it ? UTF-16 char ?} - ( \lstinline{'"'} @ \lstinline{'\\n'} @ \lstinline{'\\'} )
+;;;
+Punctuator :::=
+\lstinline{'['} @ \lstinline{']'} @ \lstinline{'('} @ \lstinline{')'} @ \lstinline{'\{'} @ \lstinline{'\}'} @ \lstinline{'.'} @ \lstinline{'->'} @ \lstinline{'++'} @ \lstinline{'--'} @ \lstinline{'\&'} @ \lstinline{'*'} @ \lstinline{'+'} @ \lstinline{'-'} @ \lstinline{'~'} @ \lstinline{'\!'} @ \lstinline{'\/'} @ \lstinline{'\%'} @ \lstinline{'<<'} @ \lstinline{'>>'} @ \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} @ \lstinline{'=='} @ \lstinline{'\!='} @ \lstinline{'^'} @ \lstinline{'|'} @ \lstinline{'\&\&'} @ \lstinline{'||'} @ \lstinline{'\?'} @ \lstinline{':'} @ \lstinline{';'} @ \lstinline{'...'} @ \lstinline{'='} @ \lstinline{'*='} @ \lstinline{'\/='} @ \lstinline{'\%='} @ \lstinline{'+='} @ \lstinline{'-='} @ \lstinline{'<<='} @ \lstinline{'>>='} @ \lstinline{'\&='} @ \lstinline{'^='} @ \lstinline{'|='} @ \lstinline{','} @ \lstinline{'\#'} @ \lstinline{'\#\#'} @ \lstinline{'<:'} @ \lstinline{':>'} @ \lstinline{'<\%'} @ \lstinline{'\%>'} @ \lstinline{'\%:'} @ \lstinline{'\%:\%:'}
+// \hyperref[subsec:punctuators]{punctuator}
+\end{bnf}
 }
 
 \bigskip
 \subsection{Expressions}
 \bigskip
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
-    PrimaryExpression :::=
-    ! {\sffamily Identifier}
-    ! {\sffamily Constant}
-    ! {\sffamily StringLiteral}
-    ! \lstinline{'('} , {\sffamily Expression} , \lstinline{')'}
-    ;;;
-    PostfixExpression :::=
-    {\sffamily PrimaryExpression} , \{ {\sffamily PostfixOp} \};;;
-    PostfixOp :::=
-    ! \lstinline{'['} , {\sffamily Expression} , \lstinline{']'} // array subscripting
-    ! \lstinline{'('} , [ {\sffamily ArgumentExpressionList} ] , \lstinline{')'}  // function call
-    ! \lstinline{'.'} , {\sffamily Identifier} // struct member
-    ! \lstinline{'->'} , {\sffamily Identifier} 
-    ! \lstinline{'++'} 
-    @ \lstinline{'--'} // postfix incr/decr
-    ;;;
-    ArgumentExpressionList :::=
-    {\sffamily AssignmentExpression} , \newline
-    \{ \lstinline{','} , {\sffamily AssignmentExpression} \};;;
-    UnaryExpression :::=
-    ! {\sffamily PostfixExpression}
-    ! \lstinline{'++'} , {\sffamily UnaryExpression} // prefix incr/decr
-    ! \lstinline{'--'} , {\sffamily UnaryExpression} 
-    ! {\sffamily UnaryOperator} , {\sffamily CastExpression} 
-    ! \lstinline{'sizeof'} , \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} // sizeof operator
-    ! \lstinline{'sizeof'} , {\sffamily UnaryExpression} 
-    ;;;
-    UnaryOperator :::=
-    \lstinline{'\&'} // address operator
-    ! \lstinline{'*'} // indirection operator
-    ! \lstinline{'+'}
-    @ \lstinline{'-'}
-    @ \lstinline{'~'}
-    @ \lstinline{'\!'} // unary arithmetic
-    ;;;
-    CastExpression :::=
-    ! {\sffamily UnaryExpression}
-    ! \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} , {\sffamily CastExpression}
-    ;;;
-    MultiplicativeExpression :::=
-    {\sffamily CastExpression} , \newline
-    \{ ( \lstinline{'*'} @ \lstinline{'\/'} @ \lstinline{'\%'} ) , {\sffamily CastExpression} \}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
+PrimaryExpression :::=
+! {\sffamily Identifier}
+// \hyperref[subsec:priexpr]{primary expr}
+! {\sffamily Constant}
+! {\sffamily StringLiteral}
+! \lstinline{'('} , {\sffamily Expression} , \lstinline{')'}
+// parenthesized expr
+;;;
+PostfixExpression :::=
+{\sffamily PrimaryExpression} , \{ {\sffamily PostfixOp} \}
+// \hyperref[subsec:postfixop]{postfix operators}
+;;;
+PostfixOp :::=
+! \lstinline{'['} , {\sffamily Expression} , \lstinline{']'} // \hyperref[subsubsec:arraysub]{array subscripting}
+! \lstinline{'('} , [ {\sffamily ArgumentExpressionList} ] , \lstinline{')'}  // \hyperref[subsubsec:fncall]{function call}
+! \lstinline{'.'} , {\sffamily Identifier} // \hyperref[subsubsec:structmem]{structure member}
+! \lstinline{'->'} , {\sffamily Identifier} // \hyperref[subsubsec:structmem]{structure member}
+! \lstinline{'++'} 
+@ \lstinline{'--'} // \hyperref[subsubsec:postfixincrdecr]{postfix incr/decr}
+;;;
+ArgumentExpressionList :::=
+{\sffamily AssignmentExpression} , \newline
+\{ \lstinline{','} , {\sffamily AssignmentExpression} \};;;
+UnaryExpression :::=
+! {\sffamily PostfixExpression} 
+! \lstinline{'++'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:prefixincrdecr]{prefix incr}
+! \lstinline{'--'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:prefixincrdecr]{prefix decr}
+! {\sffamily UnaryOperator} , {\sffamily CastExpression} // \hyperref[subsec:unaryop]{unary operators}
+! \lstinline{'sizeof'} , \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} // \hyperref[subsubsec:sizeof]{sizeof operator}
+! \lstinline{'sizeof'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:sizeof]{sizeof operator}
+;;;
+UnaryOperator :::=
+\lstinline{'\&'} // \hyperref[subsubsec:addrindirop]{address operator}
+! \lstinline{'*'} // \hyperref[subsubsec:addrindirop]{indirection operator}
+! \lstinline{'+'}
+@ \lstinline{'-'}
+@ \lstinline{'~'}
+@ \lstinline{'\!'} // \hyperref[subsubsec:unaryarithop]{unary arithmetic operators}
+;;;
+CastExpression :::=
+! {\sffamily UnaryExpression}
+! \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} , {\sffamily CastExpression} // \hyperref[subsec:cast]{cast operator}
+;;;
+MultiplicativeExpression :::=
+{\sffamily CastExpression} , \newline
+\{ ( \lstinline{'*'} @ \lstinline{'\/'} @ \lstinline{'\%'} ) , {\sffamily CastExpression} \} // \hyperref[subsec:mult]{multiplicative operators}
+\end{bnf}
 }
 
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
-    AdditiveExpression :::=
-    {\sffamily MultiplicativeExpression} , \newline
-    \{ ( \lstinline{'+'} @ \lstinline{'-'} ) , {\sffamily MultiplicativeExpression} \};;;
-    ShiftExpression :::=
-    {\sffamily AdditiveExpression} , \newline
-    \{ ( \lstinline{'<<'} @ \lstinline{'>>'} ) , {\sffamily AdditiveExpression} \};;;
-    RelationalExpression :::=
-    {\sffamily ShiftExpression} , \newline
-    \{ ( \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} ) , {\sffamily ShiftExpression} \};;;
-    EqualityExpression :::=
-    {\sffamily RelationalExpression} , \newline
-    \{ ( \lstinline{'=='} @ \lstinline{'\!='} ) , {\sffamily RelationalExpression} \};;;
-    ANDExpression :::=
-    {\sffamily EqualityExpression} , \{ \lstinline{'\&'} , {\sffamily EqualityExpression} \};;;
-    ExclusiveORExpression :::=
-    {\sffamily ANDExpression} , \{ \lstinline{'^'} , {\sffamily ANDExpression} \};;;
-    InclusiveORExpression :::=
-    {\sffamily ExclusiveORExpression} , \newline
-    \{ \lstinline{'|'} , {\sffamily ExclusiveORExpression} \};;;
-    LogicalANDExpression :::=
-    {\sffamily InclusiveORExpression} , \newline
-    \{ \lstinline{'\&\&'} , {\sffamily InclusiveORExpression} \};;;
-    LogicalORExpression :::=
-    {\sffamily LogicalANDExpression} , \newline
-    \{ \lstinline{'||'} , {\sffamily LogicalANDExpression} \};;;
-    ConditionalExpression :::=
-    {\sffamily LogicalORExpression} , \newline
-    [ \lstinline{'\?'} , {\sffamily Expression} , \lstinline{':'} , {\sffamily ConditionalExpression} ];;;
-    AssignmentExpression :::=
-    ! {\sffamily UnaryExpression} , {\sffamily AssignmentOperator} , {\sffamily AssignmentExpression}
-    ! {\sffamily ConditionalExpression}
-    ;;;
-    AssignmentOperator :::=
-    ! \lstinline{'='} // simple assign
-    ! \lstinline{'*='}
-    @ \lstinline{'\/='}
-    @ \lstinline{'\%='}
-    @ \lstinline{'+='}
-    @ \lstinline{'-='}
-    @ \lstinline{'<<='}
-    @ \lstinline{'>>='}
-    @ \lstinline{'\&='}
-    @ \lstinline{'^='}
-    @ \lstinline{'|='} // compound assign
-    ;;;
-    Expression :::=
-    {\sffamily AssignmentExpression} , \newline
-    \{ \lstinline{','} , {\sffamily AssignmentExpression} \} // comma operator
-    ;;;
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,92mm]Q[l]}]
+AdditiveExpression :::=
+{\sffamily MultiplicativeExpression} , \newline
+\{ ( \lstinline{'+'} @ \lstinline{'-'} ) , {\sffamily MultiplicativeExpression} \}
+// \hyperref[subsec:add]{additive operators}
+;;;
+ShiftExpression :::=
+{\sffamily AdditiveExpression} , \newline
+\{ ( \lstinline{'<<'} @ \lstinline{'>>'} ) , {\sffamily AdditiveExpression} \}
+// \hyperref[subsec:shift]{bitwise shift operators}
+;;;
+RelationalExpression :::=
+{\sffamily ShiftExpression} , \newline
+\{ ( \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} ) , {\sffamily ShiftExpression} \}
+// \hyperref[subsec:rel]{relational operators}
+;;;
+EqualityExpression :::=
+{\sffamily RelationalExpression} , \newline
+\{ ( \lstinline{'=='} @ \lstinline{'\!='} ) , {\sffamily RelationalExpression} \}
+// \hyperref[subsec:eq]{equality operators}
+;;;
+ANDExpression :::=
+{\sffamily EqualityExpression} , \{ \lstinline{'\&'} , {\sffamily EqualityExpression} \}
+// \hyperref[subsec:bitand]{bitwise AND operator}
+;;;
+ExclusiveORExpression :::=
+{\sffamily ANDExpression} , \{ \lstinline{'^'} , {\sffamily ANDExpression} \}
+// \hyperref[subsec:bitxor]{bitwise XOR operator}
+;;;
+InclusiveORExpression :::=
+{\sffamily ExclusiveORExpression} , \newline
+\{ \lstinline{'|'} , {\sffamily ExclusiveORExpression} \}
+// \hyperref[subsec:bitor]{bitwise OR operator}
+;;;
+LogicalANDExpression :::=
+{\sffamily InclusiveORExpression} , \newline
+\{ \lstinline{'\&\&'} , {\sffamily InclusiveORExpression} \}
+// \hyperref[subsec:logand]{logical AND operator}
+;;;
+LogicalORExpression :::=
+{\sffamily LogicalANDExpression} , \newline
+\{ \lstinline{'||'} , {\sffamily LogicalANDExpression} \}
+// \hyperref[subsec:logor]{logical OR operator}
+;;;
+ConditionalExpression :::=
+{\sffamily LogicalORExpression} , \newline
+[ \lstinline{'\?'} , {\sffamily Expression} , \lstinline{':'} , {\sffamily ConditionalExpression} ]
+// \hyperref[subsec:cond]{conditional operator}
+;;;
+AssignmentExpression :::=
+! {\sffamily UnaryExpression} , {\sffamily AssignmentOperator} , {\sffamily AssignmentExpression} // \hyperref[subsec:assgn]{assignment operators}
+! {\sffamily ConditionalExpression}
+;;;
+AssignmentOperator :::=
+! \lstinline{'='} // \hyperref[subsubsec:simpleassgn]{simple assignment}
+! \lstinline{'*='}
+@ \lstinline{'\/='}
+@ \lstinline{'\%='}
+@ \lstinline{'+='}
+@ \lstinline{'-='}
+@ \lstinline{'<<='}
+@ \lstinline{'>>='}
+@ \lstinline{'\&='}
+@ \lstinline{'^='}
+@ \lstinline{'|='} // \hyperref[subsubsec:compoundassgn]{compound assignment}
+;;;
+Expression :::=
+{\sffamily AssignmentExpression} , \newline
+\{ \lstinline{','} , {\sffamily AssignmentExpression} \} // \hyperref[subsec:comma]{comma operator}
+;;;
+\end{bnf}
 }
 
 \bigskip
 \subsection{Declarations}
 \bigskip
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,98mm]Q[l]}]
-    Declaration :::=
-    {\sffamily DeclarationSpecifiers} , [ {\sffamily InitDeclaratorList} ] , \lstinline{';'}
-    ;;;
-    DeclarationSpecifiers :::=
-    ( {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
-    \{ {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
-    // specifiers
-    ;;;
-    InitDeclaratorList :::=
-    {\sffamily InitDeclarator} , \{ \lstinline{','} , {\sffamily InitDeclarator} \};;;
-    InitDeclarator :::=
-    {\sffamily Declarator} , [ \lstinline{'='} , {\sffamily Initializer} ];;;
-    StorageClassSpecifier :::=
-    \lstinline{'typedef'}
-    ;;;
-    TypeSpecifier :::=
-    ! \lstinline{'void'}
-    @ \lstinline{'char'}
-    @ \lstinline{'short'}
-    @ \lstinline{'int'}
-    @ \lstinline{'long'}
-    @ \lstinline{'signed'}
-    ! \lstinline{'unsigned'}
-    @ \lstinline{'\_Bool'}
-    @ {\sffamily StructOrUnionSpecifier}
-    ;;;
-    StructOrUnionSpecifier :::=
-    ! \lstinline{'struct'} , [ {\sffamily Identifier} ] , \newline
-    \lstinline{'\{'} , {\sffamily StructDeclarationList} , \lstinline{'\}'}
-    ! \lstinline{'struct'} , {\sffamily Identifier}
-    ;;;
-    StructDeclarationList :::=
-    {\sffamily StructDeclaration} , \{ {\sffamily StructDeclaration} \};;;
-    StructDeclaration :::=
-    {\sffamily SpecifierQualifierList} , [ {\sffamily StructDeclaratorList} ] , \lstinline{';'}
-    ;;;
-    SpecifierQualifierList :::=
-    ( {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
-    \{ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
-    ;;;
-    StructDeclaratorList :::=
-    {\sffamily StructDeclarator} , \{ \lstinline{','} , {\sffamily StructDeclarator} \};;;
-    StructDeclarator :::=
-    {\sffamily Declarator}
-    ;;;
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,98mm]Q[l]}]
+Declaration :::=
+{\sffamily DeclarationSpecifiers} , [ {\sffamily InitDeclaratorList} ] , \lstinline{';'}
+// \hyperref[sec:decl]{declaration}
+;;;
+DeclarationSpecifiers :::=
+( {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
+\{ {\sffamily StorageClassSpecifier} @ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
+;;;
+InitDeclaratorList :::=
+{\sffamily InitDeclarator} , \{ \lstinline{','} , {\sffamily InitDeclarator} \};;;
+InitDeclarator :::=
+{\sffamily Declarator} , [ \lstinline{'='} , {\sffamily Initializer} ];;;
+StorageClassSpecifier :::=
+\lstinline{'typedef'}
+// \hyperref[subsec:storageclassspec]{storage class specifier}
+;;;
+TypeSpecifier :::=
+! \lstinline{'void'}
+@ \lstinline{'char'}
+@ \lstinline{'short'}
+@ \lstinline{'int'}
+@ \lstinline{'long'}
+@ \lstinline{'signed'}
+// \hyperref[subsec:typespec]{type specifiers}
+! \lstinline{'unsigned'}
+@ \lstinline{'\_Bool'}
+@ {\sffamily StructOrUnionSpecifier}
+;;;
+StructOrUnionSpecifier :::=
+! \lstinline{'struct'} , [ {\sffamily Identifier} ] , \newline
+\lstinline{'\{'} , {\sffamily StructDeclarationList} , \lstinline{'\}'}
+// \hyperref[subsubsec:structspec]{structure specifier}
+! \lstinline{'struct'} , {\sffamily Identifier}
+// \hyperref[subsubsec:tags]{tags}
+;;;
+StructDeclarationList :::=
+{\sffamily StructDeclaration} , \{ {\sffamily StructDeclaration} \};;;
+StructDeclaration :::=
+{\sffamily SpecifierQualifierList} , [ {\sffamily StructDeclaratorList} ] , \lstinline{';'}
+;;;
+SpecifierQualifierList :::=
+( {\sffamily TypeSpecifier} @ {\sffamily TypedefName} ) , \newline
+\{ {\sffamily TypeSpecifier} @ {\sffamily TypedefName} \}
+;;;
+StructDeclaratorList :::=
+{\sffamily StructDeclarator} , \{ \lstinline{','} , {\sffamily StructDeclarator} \};;;
+StructDeclarator :::=
+{\sffamily Declarator}
+;;;
+\end{bnf}
 }
 
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
-    Declarator :::=
-    [ {\sffamily Pointer} ] , {\sffamily DirectDeclarator};;;
-    DirectDeclarator :::=
-    ( {\sffamily Identifier} @  ( \lstinline{'('} , {\sffamily Declarator} , \lstinline{')'} )  ) , \newline
-    \{ {\sffamily DirectDeclaratorPart} \}
-    ;;;
-    DirectDeclaratorPart :::=
-    ! \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'}
-    // array declaration
-    ! \lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'}
-    // function declaration
-    ;;;
-    Pointer :::=
-    \lstinline{'*'} , \{ \lstinline{'*'} \};;;
-    ParameterList :::=
-    {\sffamily ParameterDeclaration} , \newline
-    \{ \lstinline{','} , {\sffamily ParameterDeclaration} \};;;
-    ParameterDeclaration :::=
-    {\sffamily DeclarationSpecifiers} , \newline
-    [ {\sffamily Declarator} @ {\sffamily AbstractDeclarator} ];;;
-    TypeName :::=
-    {\sffamily SpecifierQualifierList} , [ {\sffamily AbstractDeclarator} ];;;
-    AbstractDeclarator :::=
-    ! [ {\sffamily Pointer} ] , {\sffamily DirectAbstractDeclarator}
-    ! {\sffamily Pointer}
-    ;;;
-    DirectAbstractDeclarator :::=
-    ! \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'}
-    ! [ \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'} ] , \newline
-    ( \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
-    \lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} ) , \newline
-    \{ \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
-    \lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} \}
-    ;;;
-    TypedefName :::=
-    {\sffamily Identifier};;;
-    Initializer :::=
-    ! {\sffamily AssignmentExpression}
-    ! \lstinline{'\{'} , {\sffamily InitializerList} , [ \lstinline{','} ] , \lstinline{'\}'}
-    ;;;
-    InitializerList :::=
-    [ {\sffamily Designation} ] , {\sffamily Initializer} , \newline
-    \{ \lstinline{','} , [ {\sffamily Designation} ] , {\sffamily Initializer} \};;;
-    Designation :::=
-    {\sffamily DesignatorList} , \lstinline{'='};;;
-    DesignatorList :::=
-    {\sffamily Designator} , \{ {\sffamily Designator} \};;;
-    Designator :::=
-    ! \lstinline{'['} , {\sffamily IntegerConstant} , \lstinline{']'}
-    ! \lstinline{'.'} , {\sffamily Identifier}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
+Declarator :::=
+[ {\sffamily Pointer} ] , {\sffamily DirectDeclarator}
+// \hyperref[subsec:declarator]{declarator}
+;;;
+DirectDeclarator :::=
+( {\sffamily Identifier} @  ( \lstinline{'('} , {\sffamily Declarator} , \lstinline{')'} )  ) , \newline
+\{ {\sffamily DirectDeclaratorPart} \}
+;;;
+DirectDeclaratorPart :::=
+! \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'}
+// \hyperref[subsubsec:arrdecl]{array declarator}
+! \lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'}
+// \hyperref[subsubsec:fndecl]{function declarator}
+;;;
+Pointer :::=
+\lstinline{'*'} , \{ \lstinline{'*'} \}
+// \hyperref[subsubsec:ptrdecl]{pointer declarator}
+;;;
+ParameterList :::=
+{\sffamily ParameterDeclaration} , \newline
+\{ \lstinline{','} , {\sffamily ParameterDeclaration} \};;;
+ParameterDeclaration :::=
+{\sffamily DeclarationSpecifiers} , \newline
+[ {\sffamily Declarator} @ {\sffamily AbstractDeclarator} ];;;
+TypeName :::=
+{\sffamily SpecifierQualifierList} , [ {\sffamily AbstractDeclarator} ]
+// \hyperref[subsec:typenames]{type name}
+;;;
+AbstractDeclarator :::=
+! [ {\sffamily Pointer} ] , {\sffamily DirectAbstractDeclarator}
+! {\sffamily Pointer}
+;;;
+DirectAbstractDeclarator :::=
+! \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'}
+! [ \lstinline{'('} , {\sffamily AbstractDeclarator} , \lstinline{')'} ] , \newline
+( \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
+\lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} ) , \newline
+\{ \lstinline{'['} , [ {\sffamily IntegerConstant} ] , \lstinline{']'} @ \newline
+\lstinline{'('} , [ {\sffamily ParameterList} ] , \lstinline{')'} \}
+;;;
+TypedefName :::=
+{\sffamily Identifier}
+// \hyperref[subsec:typedefs]{type definition}
+;;;
+Initializer :::=
+! {\sffamily AssignmentExpression}
+// \hyperref[subsec:init]{initialization}
+! \lstinline{'\{'} , {\sffamily InitializerList} , [ \lstinline{','} ] , \lstinline{'\}'}
+;;;
+InitializerList :::=
+[ {\sffamily Designation} ] , {\sffamily Initializer} , \newline
+\{ \lstinline{','} , [ {\sffamily Designation} ] , {\sffamily Initializer} \};;;
+Designation :::=
+{\sffamily DesignatorList} , \lstinline{'='};;;
+DesignatorList :::=
+{\sffamily Designator} , \{ {\sffamily Designator} \};;;
+Designator :::=
+! \lstinline{'['} , {\sffamily IntegerConstant} , \lstinline{']'}
+! \lstinline{'.'} , {\sffamily Identifier}
+\end{bnf}
 }
 
 \bigskip
 \subsection{Statements}
 \medskip
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
-    Statement :::=
-    ! {\sffamily CompoundStatement}
-    ! {\sffamily ExpressionStatement}
-    ! {\sffamily SelectionStatement}
-    ! {\sffamily IterationStatement}
-    ! {\sffamily JumpStatement}
-    ;;;
-    CompoundStatement :::=
-    \lstinline{'\{'} , [ {\sffamily BlockItemList} ] , \lstinline{'\}'};;;
-    BlockItemList :::=
-    {\sffamily BlockItem} , \{ {\sffamily BlockItem} \};;;
-    BlockItem :::=
-    ! {\sffamily Statement}
-    ! {\sffamily Declaration}
-    ;;;
-    ExpressionStatement :::=
-    [ {\sffamily Expression} ] , \lstinline{';'};;;
-    SelectionStatement :::=
-    \lstinline{'if'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement} , \newline
-    [ \lstinline{'else'} , {\sffamily Statement} ]
-    ;;;
-    IterationStatement :::=
-    ! \lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement}
-    ! \lstinline{'do'} , {\sffamily Statement} , \newline
-    \lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , \lstinline{';'}
-    ! 
-    \lstinline{'for'} , \lstinline{'('} , [ {\sffamily Expression} ] , \lstinline{';'} , \newline
-    \makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{';'} , \newline
-    \makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{')'} , {\sffamily Statement}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
+Statement :::=
+! {\sffamily CompoundStatement} // \hyperref[subsec:compstmt]{compound stmt}
+! {\sffamily ExpressionStatement} // \hyperref[subsec:exprnullstmt]{expression stmt}
+! {\sffamily SelectionStatement} // \hyperref[subsec:selectionstmt]{selection stmt}
+! {\sffamily IterationStatement} // \hyperref[subsec:iterstmt]{iteration stmt}
+! {\sffamily JumpStatement} // \hyperref[subsec:jumpstmt]{jump stmt}
+;;;
+CompoundStatement :::=
+\lstinline{'\{'} , [ {\sffamily BlockItemList} ] , \lstinline{'\}'}
+// \hyperref[subsec:compstmt]{compound stmt}
+;;;
+BlockItemList :::=
+{\sffamily BlockItem} , \{ {\sffamily BlockItem} \};;;
+BlockItem :::=
+! {\sffamily Statement}
+! {\sffamily Declaration}
+;;;
+ExpressionStatement :::=
+[ {\sffamily Expression} ] , \lstinline{';'}
+// \hyperref[subsec:exprnullstmt]{expression stmt}
+;;;
+SelectionStatement :::=
+\lstinline{'if'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement} , \newline
+[ \lstinline{'else'} , {\sffamily Statement} ]
+// \hyperref[subsubsec:if]{if stmt}
+;;;
+IterationStatement :::=
+! \lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement}
+// \hyperref[subsubsec:while]{while stmt}
+! \lstinline{'do'} , {\sffamily Statement} , \newline
+\lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , \lstinline{';'}
+// \hyperref[subsubsec:do]{do stmt}
+! 
+\lstinline{'for'} , \lstinline{'('} , [ {\sffamily Expression} ] , \lstinline{';'} , \newline
+\makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{';'} , \newline
+\makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{')'} , {\sffamily Statement}
+// \hyperref[subsubsec:for]{for stmt}
+\end{bnf}
 }
 
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
-    JumpStatement :::=
-    ! \lstinline{'continue'} , \lstinline{';'}
-    ! \lstinline{'break'} , \lstinline{';'}
-    ! \lstinline{'return'} , [ {\sffamily Expression} ] , \lstinline{';'}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
+JumpStatement :::=
+! \lstinline{'continue'} , \lstinline{';'} // \hyperref[subsubsec:cont]{continue stmt}
+! \lstinline{'break'} , \lstinline{';'} // \hyperref[subsubsec:break]{break stmt}
+! \lstinline{'return'} , [ {\sffamily Expression} ] , \lstinline{';'} // \hyperref[subsubsec:return]{return stmt}
+\end{bnf}
 }
-    
+
 \bigskip
 \subsection{External Definitions}
 \bigskip
 \centerline{
-    \begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
-    TranslationUnit :::=
-    {\sffamily ExternalDeclaration} , \{ {\sffamily ExternalDeclaration} \}
-    // \hyperref[sec:extdef]{external definitions}
-    ;;;
-    ExternalDeclaration :::=
-    ! {\sffamily FunctionDefinition}
-    ! {\sffamily Declaration}
-    ;;;
-    FunctionDefinition :::=
-    {\sffamily DeclarationSpecifiers} , {\sffamily Declarator} , {\sffamily CompoundStatement}
-    // \hyperref[subsec:fndef]{function definitions}
-    ;;;
-    DeclarationList :::=
-    {\sffamily Declaration} , \{ {\sffamily Declaration} \}
-    \end{bnf}
+\begin{bnf}[colspec={Q[0mm]Q[r,font=\sffamily]Q[r]Q[l,mode=text,font=\ttfamily,90mm]Q[l]}]
+TranslationUnit :::=
+{\sffamily ExternalDeclaration} , \{ {\sffamily ExternalDeclaration} \}
+// \hyperref[sec:extdef]{external definitions}
+;;;
+ExternalDeclaration :::=
+! {\sffamily FunctionDefinition}
+! {\sffamily Declaration}
+;;;
+FunctionDefinition :::=
+{\sffamily DeclarationSpecifiers} , {\sffamily Declarator} , {\sffamily CompoundStatement}
+// \hyperref[subsec:fndef]{function definitions}
+;;;
+DeclarationList :::=
+{\sffamily Declaration} , \{ {\sffamily Declaration} \}
+\end{bnf}
 }

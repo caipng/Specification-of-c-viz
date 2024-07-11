@@ -1,0 +1,74 @@
+\newpage
+\section{Statements and blocks}\label{sec:stmt}
+\specsyntax{
+Statement :::=
+! {\sffamily CompoundStatement} // \hyperref[subsec:compstmt]{compound stmt}
+! {\sffamily ExpressionStatement} // \hyperref[subsec:exprnullstmt]{expression stmt}
+! {\sffamily SelectionStatement} // \hyperref[subsec:selectionstmt]{selection stmt}
+! {\sffamily IterationStatement} // \hyperref[subsec:iterstmt]{iteration stmt}
+! {\sffamily JumpStatement} // \hyperref[subsec:jumpstmt]{jump stmt}
+;;;
+}
+
+
+\subsection{Compound statement}\label{subsec:compstmt}
+\specsyntax{
+CompoundStatement :::=
+\lstinline{'\{'} , [ {\sffamily BlockItemList} ] , \lstinline{'\}'}
+// \hyperref[subsec:compstmt]{compound stmt}
+;;;
+BlockItemList :::=
+{\sffamily BlockItem} , \{ {\sffamily BlockItem} \};;;
+BlockItem :::=
+! {\sffamily Statement}
+! {\sffamily Declaration}
+;;;
+}
+
+\subsection{Expression and null statements}\label{subsec:exprnullstmt}
+\specsyntax{
+ExpressionStatement :::=
+[ {\sffamily Expression} ] , \lstinline{';'}
+// \hyperref[subsec:exprnullstmt]{expression stmt}
+;;;
+}
+
+\subsection{Selection statements}\label{subsec:selectionstmt}
+\specsyntax{
+SelectionStatement :::=
+\lstinline{'if'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement} , \newline
+[ \lstinline{'else'} , {\sffamily Statement} ]
+// \hyperref[subsubsec:if]{if stmt}
+;;;
+}
+
+\subsubsection{The \texttt{if} statement}\label{subsubsec:if}
+\subsection{Iteration statements}\label{subsec:iterstmt}
+\specsyntax{
+IterationStatement :::=
+! \lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , {\sffamily Statement}
+// \hyperref[subsubsec:while]{while stmt}
+! \lstinline{'do'} , {\sffamily Statement} , \newline
+\lstinline{'while'} , \lstinline{'('} , {\sffamily Expression} , \lstinline{')'} , \lstinline{';'}
+// \hyperref[subsubsec:do]{do stmt}
+! 
+\lstinline{'for'} , \lstinline{'('} , [ {\sffamily Expression} ] , \lstinline{';'} , \newline
+\makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{';'} , \newline
+\makebox[71pt]{} [ {\sffamily Expression} ] , \lstinline{')'} , {\sffamily Statement}
+// \hyperref[subsubsec:for]{for stmt}
+}
+
+\subsubsection{The \texttt{while} statement}\label{subsubsec:while}
+\subsubsection{The \texttt{do} statement}\label{subsubsec:do}
+\subsubsection{The \texttt{for} statement}\label{subsubsec:for}
+\subsection{Jump statements}\label{subsec:jumpstmt}
+\specsyntax{
+JumpStatement :::=
+! \lstinline{'continue'} , \lstinline{';'} // \hyperref[subsubsec:cont]{continue stmt}
+! \lstinline{'break'} , \lstinline{';'} // \hyperref[subsubsec:break]{break stmt}
+! \lstinline{'return'} , [ {\sffamily Expression} ] , \lstinline{';'} // \hyperref[subsubsec:return]{return stmt}
+}
+
+\subsubsection{The \texttt{continue} statement}\label{subsubsec:cont}
+\subsubsection{The \texttt{break} statement}\label{subsubsec:break}
+\subsubsection{The \texttt{return} statement}\label{subsubsec:return}

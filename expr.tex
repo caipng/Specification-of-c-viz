@@ -1,0 +1,207 @@
+\newpage
+\section{Expressions}\label{sec:expr}
+
+\subsection{Primary expressions}\label{subsec:priexpr}
+\specsyntax{
+PrimaryExpression :::=
+! {\sffamily Identifier}
+// \hyperref[subsec:priexpr]{primary expr}
+! {\sffamily Constant}
+! {\sffamily StringLiteral}
+! \lstinline{'('} , {\sffamily Expression} , \lstinline{')'}
+// parenthesized expr
+;;;
+}
+
+\subsection{Postfix operators}\label{subsec:postfixop}
+\specsyntax{
+PostfixExpression :::=
+{\sffamily PrimaryExpression} , \{ {\sffamily PostfixOp} \}
+// \hyperref[subsec:postfixop]{postfix operators}
+;;;
+PostfixOp :::=
+! \lstinline{'['} , {\sffamily Expression} , \lstinline{']'} // \hyperref[subsubsec:arraysub]{array subscripting}
+! \lstinline{'('} , [ {\sffamily ArgumentExpressionList} ] , \lstinline{')'}  // \hyperref[subsubsec:fncall]{function call}
+! \lstinline{'.'} , {\sffamily Identifier} // \hyperref[subsubsec:structmem]{structure member}
+! \lstinline{'->'} , {\sffamily Identifier} // \hyperref[subsubsec:structmem]{structure member}
+! \lstinline{'++'} 
+@ \lstinline{'--'} // \hyperref[subsubsec:postfixincrdecr]{postfix incr/decr}
+;;;
+ArgumentExpressionList :::=
+{\sffamily AssignmentExpression} , \newline
+\{ \lstinline{','} , {\sffamily AssignmentExpression} \};;;
+}
+
+\subsubsection{Array subscripting}\label{subsubsec:arraysub}
+\specconstraints{
+One of the expressions shall have type ``pointer to object \emph{type}", the other shall have integer type, and the result has type ``\emph{type}".
+}
+
+\specsem{
+The definition of the subscript operator \Verb![]! is that \Verb!E1[E2]! is identical to \Verb!(*((E1)+(E2)))!. As a consequence of the conversion rules that apply to the \Verb!+! operator, if \Verb!E1! is an array object (equivalently, a pointer to the first element of an array) and \Verb!E2! is an integer, \Verb!E1[E2]! designates the \Verb!E2!-th element of \Verb!E1! (0-indexed).
+}
+
+\subsubsection{Function calls}\label{subsubsec:fncall}
+\subsubsection{Structure members}\label{subsubsec:structmem}
+\subsubsection{Postfix increment and decrement operators}\label{subsubsec:postfixincrdecr}
+
+\subsection{Unary operators}\label{subsec:unaryop}
+\specsyntax{
+UnaryExpression :::=
+! {\sffamily PostfixExpression} 
+! \lstinline{'++'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:prefixincrdecr]{prefix incr}
+! \lstinline{'--'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:prefixincrdecr]{prefix decr}
+! {\sffamily UnaryOperator} , {\sffamily CastExpression} // \hyperref[subsec:unaryop]{unary operators}
+! \lstinline{'sizeof'} , \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} // \hyperref[subsubsec:sizeof]{sizeof operator}
+! \lstinline{'sizeof'} , {\sffamily UnaryExpression} // \hyperref[subsubsec:sizeof]{sizeof operator}
+;;;
+UnaryOperator :::=
+\lstinline{'\&'} // \hyperref[subsubsec:addrindirop]{address operator}
+! \lstinline{'*'} // \hyperref[subsubsec:addrindirop]{indirection operator}
+! \lstinline{'+'}
+@ \lstinline{'-'}
+@ \lstinline{'~'}
+@ \lstinline{'\!'} // \hyperref[subsubsec:unaryarithop]{unary arithmetic operators}
+;;;
+}
+
+\subsubsection{Prefix increment and decrement operators}\label{subsubsec:prefixincrdecr}
+\subsubsection{Address and indirection operators}\label{subsubsec:addrindirop}
+\subsubsection{Unary arithmetic operators}\label{subsubsec:unaryarithop}
+\subsubsection{The \texttt{sizeof} operator}\label{subsubsec:sizeof}
+
+\subsection{Cast operators}\label{subsec:cast}
+\specsyntax{
+CastExpression :::=
+! {\sffamily UnaryExpression}
+! \lstinline{'('} , {\sffamily TypeName} , \lstinline{')'} , {\sffamily CastExpression} // \hyperref[subsec:cast]{cast operator}
+;;;
+}
+
+\subsection{Multiplicative operators}\label{subsec:mult}
+\specsyntax{
+MultiplicativeExpression :::=
+{\sffamily CastExpression} , \newline
+\{ ( \lstinline{'*'} @ \lstinline{'\/'} @ \lstinline{'\%'} ) , {\sffamily CastExpression} \} // \hyperref[subsec:mult]{multiplicative operators}
+}
+
+\subsection{Additive operators}\label{subsec:add}
+\specsyntax{
+AdditiveExpression :::=
+{\sffamily MultiplicativeExpression} , \newline
+\{ ( \lstinline{'+'} @ \lstinline{'-'} ) , {\sffamily MultiplicativeExpression} \}
+// \hyperref[subsec:add]{additive operators}
+;;;
+}
+
+\subsection{Bitwise shift operators}\label{subsec:shift}
+\specsyntax{
+ShiftExpression :::=
+{\sffamily AdditiveExpression} , \newline
+\{ ( \lstinline{'<<'} @ \lstinline{'>>'} ) , {\sffamily AdditiveExpression} \}
+// \hyperref[subsec:shift]{bitwise shift operators}
+;;;
+}
+
+\subsection{Relational operators}\label{subsec:rel}
+\specsyntax{
+RelationalExpression :::=
+{\sffamily ShiftExpression} , \newline
+\{ ( \lstinline{'<'} @ \lstinline{'>'} @ \lstinline{'<='} @ \lstinline{'>='} ) , {\sffamily ShiftExpression} \}
+// \hyperref[subsec:rel]{relational operators}
+;;;
+}
+
+\subsection{Equality operators}\label{subsec:eq}
+\specsyntax{
+EqualityExpression :::=
+{\sffamily RelationalExpression} , \newline
+\{ ( \lstinline{'=='} @ \lstinline{'\!='} ) , {\sffamily RelationalExpression} \}
+// \hyperref[subsec:eq]{equality operators}
+;;;
+}
+
+\subsection{Bitwise AND operator}\label{subsec:bitand}
+\specsyntax{
+ANDExpression :::=
+{\sffamily EqualityExpression} , \{ \lstinline{'\&'} , {\sffamily EqualityExpression} \}
+// \hyperref[subsec:bitand]{bitwise AND operator}
+;;;
+}
+
+\subsection{Bitwise exclusive OR operator}\label{subsec:bitxor}
+\specsyntax{
+ExclusiveORExpression :::=
+{\sffamily ANDExpression} , \{ \lstinline{'^'} , {\sffamily ANDExpression} \}
+// \hyperref[subsec:bitxor]{bitwise XOR operator}
+;;;
+}
+
+\subsection{Bitwise inclusive OR operator}\label{subsec:bitor}
+\specsyntax{
+InclusiveORExpression :::=
+{\sffamily ExclusiveORExpression} , \newline
+\{ \lstinline{'|'} , {\sffamily ExclusiveORExpression} \}
+// \hyperref[subsec:bitor]{bitwise OR operator}
+;;;
+}
+
+\subsection{Logical AND operator}\label{subsec:logand}
+\specsyntax{
+LogicalANDExpression :::=
+{\sffamily InclusiveORExpression} , \newline
+\{ \lstinline{'\&\&'} , {\sffamily InclusiveORExpression} \}
+// \hyperref[subsec:logand]{logical AND operator}
+;;;
+}
+
+\subsection{Logical OR operator}\label{subsec:logor}
+\specsyntax{
+LogicalORExpression :::=
+{\sffamily LogicalANDExpression} , \newline
+\{ \lstinline{'||'} , {\sffamily LogicalANDExpression} \}
+// \hyperref[subsec:logor]{logical OR operator}
+;;;
+}
+
+\subsection{Conditional operator}\label{subsec:cond}
+\specsyntax{
+ConditionalExpression :::=
+{\sffamily LogicalORExpression} , \newline
+[ \lstinline{'\?'} , {\sffamily Expression} , \lstinline{':'} , {\sffamily ConditionalExpression} ]
+// \hyperref[subsec:cond]{conditional operator}
+;;;
+}
+
+\subsection{Assignment operators}\label{subsec:assgn}
+\specsyntax{
+AssignmentExpression :::=
+! {\sffamily UnaryExpression} , {\sffamily AssignmentOperator} , {\sffamily AssignmentExpression} // \hyperref[subsec:assgn]{assignment operators}
+! {\sffamily ConditionalExpression}
+;;;
+AssignmentOperator :::=
+! \lstinline{'='} // \hyperref[subsubsec:simpleassgn]{simple assignment}
+! \lstinline{'*='}
+@ \lstinline{'\/='}
+@ \lstinline{'\%='}
+@ \lstinline{'+='}
+@ \lstinline{'-='}
+@ \lstinline{'<<='}
+@ \lstinline{'>>='}
+@ \lstinline{'\&='}
+@ \lstinline{'^='}
+@ \lstinline{'|='} // \hyperref[subsubsec:compoundassgn]{compound assignment}
+;;;
+}
+
+\subsubsection{Simple assignment}\label{subsubsec:simpleassgn}
+\subsubsection{Compound assignment}\label{subsubsec:compoundassgn}
+
+\subsection{Comma operator}\label{subsec:comma}
+\specsyntax{
+Expression :::=
+{\sffamily AssignmentExpression} , \newline
+\{ \lstinline{','} , {\sffamily AssignmentExpression} \} // \hyperref[subsec:comma]{comma operator}
+;;;
+}
+
